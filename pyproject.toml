@@ -1,0 +1,56 @@
+[project]
+name = "manual-rag-api"
+version = "0.1.0"
+description = "Multimodal RAG API for technical service manuals"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # Pipeline — PDF extraction
+    "docling>=2.69.0",
+    "easyocr>=1.7.2",
+    "litellm>=1.81.0",
+    "pymupdf>=1.26.7",
+    # Retrieval
+    "lancedb>=0.20.0",
+    "sentence-transformers>=3.0.0",
+    "rank-bm25>=0.2.2",
+    # API server
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.30.0",
+    # UI
+    "gradio>=4.0.0",
+    # Utilities
+    "python-dotenv>=1.0.0",
+    "tqdm>=4.0.0",
+    "tenacity>=9.1.4",
+]
+
+[project.scripts]
+manual-rag = "manual_rag_api.application.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+sources = ["src"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/manual_rag_api"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts   = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]

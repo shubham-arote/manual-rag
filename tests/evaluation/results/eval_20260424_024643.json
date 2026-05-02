@@ -1,0 +1,2387 @@
+{
+  "timestamp": "20260424_024643",
+  "index_dir": "lancedb_index",
+  "n_queries": 30,
+  "aggregates": [
+    {
+      "mode": "vector",
+      "n_queries": 30,
+      "recall_1": 0.9,
+      "recall_3": 1.0,
+      "recall_5": 1.0,
+      "recall_10": 1.0,
+      "precision_5": 0.6133,
+      "mrr": 0.9444,
+      "avg_latency": 398.0,
+      "zero_results": 0
+    },
+    {
+      "mode": "bm25",
+      "n_queries": 30,
+      "recall_1": 0.9333,
+      "recall_3": 0.9667,
+      "recall_5": 0.9667,
+      "recall_10": 1.0,
+      "precision_5": 0.6933,
+      "mrr": 0.9556,
+      "avg_latency": 100.5,
+      "zero_results": 0
+    },
+    {
+      "mode": "hybrid",
+      "n_queries": 30,
+      "recall_1": 0.9667,
+      "recall_3": 1.0,
+      "recall_5": 1.0,
+      "recall_10": 1.0,
+      "precision_5": 0.6733,
+      "mrr": 0.9833,
+      "avg_latency": 492.6,
+      "zero_results": 0
+    }
+  ],
+  "per_query": {
+    "vector": [
+      {
+        "query_id": "Q01",
+        "query": "tire pressure for model 642",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 1292.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          21,
+          21,
+          21,
+          22,
+          22
+        ],
+        "top_texts": [
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH",
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH",
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH"
+        ]
+      },
+      {
+        "query_id": "Q02",
+        "query": "wheel lug nut torque specification",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 356.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          19,
+          19,
+          21,
+          14,
+          28
+        ],
+        "top_texts": [
+          "Description Specifications 642, 943, 1043 1055, 1255 Engine Make/Model Cummins Q",
+          "Description Specifications 742, 943 Engine Make/Model Cummins QSF3.8 Displacemen",
+          "2.2.8 Tires  Note:  Wheel lug nut torque is 350-400 lb-ft (475-542 Nm)  Note:  P"
+        ]
+      },
+      {
+        "query_id": "Q03",
+        "query": "engine oil capacity 642",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 360.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          25,
+          26,
+          27,
+          33,
+          26
+        ],
+        "top_texts": [
+          "2.3.3 Capacities  a. 642, 742  Engine Crankcase Oil  General Information and Spe",
+          "General Information and Specifications  b. 943, 1043  Engine Crankcase Oil",
+          "c. 1055, 1255  Engine Crankcase Oil  General Information and Specifications"
+        ]
+      },
+      {
+        "query_id": "Q04",
+        "query": "fuel tank capacity",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 365.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          27,
+          25,
+          25,
+          32
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q05",
+        "query": "hydraulic system capacity 642 with outriggers",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 372.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          7,
+          24,
+          14,
+          25,
+          19
+        ],
+        "top_texts": [
+          "Section Subject Page Section 8 Hydraulic System ................................",
+          "General Information and Specifications  2.3.2 Fluids (if equipped for LS)",
+          "2.8 Hydraulic Connection Assembly and Torque Specification . . . . . . . . . . ."
+        ]
+      },
+      {
+        "query_id": "Q06",
+        "query": "hydraulic system capacity 642 no outriggers",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 376.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          7,
+          24,
+          17,
+          25,
+          14
+        ],
+        "top_texts": [
+          "Section Subject Page Section 8 Hydraulic System ................................",
+          "General Information and Specifications  2.3.2 Fluids (if equipped for LS)",
+          "2.2.4 Hydraulic Cylinder Performance  Note: Machine with no attachment or load, "
+        ]
+      },
+      {
+        "query_id": "Q07",
+        "query": "DEF tank capacity",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 344.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          27,
+          25,
+          25,
+          24
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q08",
+        "query": "cooling system capacity",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 456.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          25,
+          27,
+          24,
+          25
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q09",
+        "query": "transmission oil capacity including cooler",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 353.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          25,
+          25,
+          27,
+          26
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "2.3.3 Capacities  a. 642, 742  Engine Crankcase Oil  General Information and Spe",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q10",
+        "query": "brake fluid capacity",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 381.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          27,
+          25,
+          24,
+          25
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q11",
+        "query": "how often to change hydraulic fluid",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 335.3,
+        "results_count": 10,
+        "recall_1": 0.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 0.5,
+        "top_pages": [
+          29,
+          31,
+          33,
+          30,
+          24
+        ],
+        "top_texts": [
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "2.5 LUBRICATION SCHEDULE  2.5.1 50 Hour  a. 642, 742, 943 & 1043"
+        ]
+      },
+      {
+        "query_id": "Q12",
+        "query": "engine oil change interval ULS with synthetic oil",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 600.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          31,
+          29,
+          30,
+          28,
+          33
+        ],
+        "top_texts": [
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change "
+        ]
+      },
+      {
+        "query_id": "Q13",
+        "query": "engine oil change interval LS conventional oil",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 370.0,
+        "results_count": 10,
+        "recall_1": 0.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 0.5,
+        "top_pages": [
+          29,
+          31,
+          30,
+          33,
+          28
+        ],
+        "top_texts": [
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change "
+        ]
+      },
+      {
+        "query_id": "Q14",
+        "query": "when to change axle oil",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 237.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          29,
+          31,
+          33,
+          30,
+          27
+        ],
+        "top_texts": [
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "2.5 LUBRICATION SCHEDULE  2.5.1 50 Hour  a. 642, 742, 943 & 1043"
+        ]
+      },
+      {
+        "query_id": "Q15",
+        "query": "hydraulic tank breather change interval",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 354.8,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          30,
+          31,
+          32,
+          29,
+          17
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change ",
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE"
+        ]
+      },
+      {
+        "query_id": "Q16",
+        "query": "hydraulic filter change interval",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 391.7,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          31,
+          29,
+          30,
+          32,
+          33
+        ],
+        "top_texts": [
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change "
+        ]
+      },
+      {
+        "query_id": "Q17",
+        "query": "how to safely remove coolant system cap",
+        "query_type": "procedure",
+        "mode": "vector",
+        "latency_ms": 344.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          11,
+          10,
+          24,
+          13
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish"
+        ]
+      },
+      {
+        "query_id": "Q18",
+        "query": "what safety gear to wear when performing maintenance",
+        "query_type": "diagnostic",
+        "mode": "vector",
+        "latency_ms": 370.5,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          11,
+          10,
+          12,
+          9,
+          5
+        ],
+        "top_texts": [
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf"
+        ]
+      },
+      {
+        "query_id": "Q19",
+        "query": "do not service machine near open flame",
+        "query_type": "diagnostic",
+        "mode": "vector",
+        "latency_ms": 360.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          10,
+          11,
+          4,
+          5
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef"
+        ]
+      },
+      {
+        "query_id": "Q20",
+        "query": "stop engine before performing service",
+        "query_type": "procedure",
+        "mode": "vector",
+        "latency_ms": 324.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          10,
+          29,
+          11,
+          19
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O"
+        ]
+      },
+      {
+        "query_id": "Q21",
+        "query": "where is the machine serial number located",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 339.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          15,
+          1,
+          36,
+          22,
+          10
+        ],
+        "top_texts": [
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat",
+          "Service Manual  Models 642, 742, 943, 1043, 1055, 1255  31211033  April 11 , 201",
+          "General Information and Specifications  b. 1055, 1255"
+        ]
+      },
+      {
+        "query_id": "Q22",
+        "query": "replacement parts warranty information",
+        "query_type": "general",
+        "mode": "vector",
+        "latency_ms": 335.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          15,
+          13,
+          10,
+          36,
+          6
+        ],
+        "top_texts": [
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat",
+          "PARAGRAPH TITLE PAGE 2.1 Replacement Parts and Warranty Information. . . . . . .",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish"
+        ]
+      },
+      {
+        "query_id": "Q23",
+        "query": "which models does this manual cover",
+        "query_type": "general",
+        "mode": "vector",
+        "latency_ms": 332.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          3,
+          1,
+          10,
+          13,
+          19
+        ],
+        "top_texts": [
+          "DATE REVISION DESCRIPTION April 28, 2015 A Original Issue Of Manual October 30, ",
+          "Service Manual  Models 642, 742, 943, 1043, 1055, 1255  31211033  April 11 , 201",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish"
+        ]
+      },
+      {
+        "query_id": "Q24",
+        "query": "what is the difference between ULS and LS machine configuration",
+        "query_type": "comparison",
+        "mode": "vector",
+        "latency_ms": 334.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          4,
+          30,
+          24,
+          28,
+          23
+        ],
+        "top_texts": [
+          "Modifications  Modifications to this machine may affect compliance with Industry",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change ",
+          "General Information and Specifications  2.3.2 Fluids (if equipped for LS)"
+        ]
+      },
+      {
+        "query_id": "Q25",
+        "query": "DEF strainer cleaning interval",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 320.7,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          32,
+          33,
+          29,
+          11,
+          17
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE",
+          "2.5 LUBRICATION SCHEDULE  2.5.1 50 Hour  a. 642, 742, 943 & 1043",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O"
+        ]
+      },
+      {
+        "query_id": "Q26",
+        "query": "engine valve lash adjustment schedule",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 389.4,
+        "results_count": 10,
+        "recall_1": 0.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 0.3333333333333333,
+        "top_pages": [
+          33,
+          29,
+          32,
+          30,
+          31
+        ],
+        "top_texts": [
+          "2.5 LUBRICATION SCHEDULE  2.5.1 50 Hour  a. 642, 742, 943 & 1043",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE"
+        ]
+      },
+      {
+        "query_id": "Q27",
+        "query": "check transmission oil level frequency",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 338.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          28,
+          29,
+          27,
+          26,
+          33
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "c. 1055, 1255  Engine Crankcase Oil  General Information and Specifications"
+        ]
+      },
+      {
+        "query_id": "Q28",
+        "query": "what must be approved before modifying the machine",
+        "query_type": "general",
+        "mode": "vector",
+        "latency_ms": 346.5,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          4,
+          11,
+          15,
+          10,
+          36
+        ],
+        "top_texts": [
+          "Modifications  Modifications to this machine may affect compliance with Industry",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat"
+        ]
+      },
+      {
+        "query_id": "Q29",
+        "query": "hydraulic pressure fluid penetration skin injury",
+        "query_type": "diagnostic",
+        "mode": "vector",
+        "latency_ms": 422.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          7,
+          11,
+          5,
+          24
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "Section Subject Page Section 8 Hydraulic System ................................",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef"
+        ]
+      },
+      {
+        "query_id": "Q30",
+        "query": "tire pressure for model 1255",
+        "query_type": "lookup",
+        "mode": "vector",
+        "latency_ms": 434.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          21,
+          21,
+          21,
+          22,
+          22
+        ],
+        "top_texts": [
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH",
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH",
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH"
+        ]
+      }
+    ],
+    "bm25": [
+      {
+        "query_id": "Q01",
+        "query": "tire pressure for model 642",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 177.6,
+        "results_count": 10,
+        "recall_1": 0.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 0.5,
+        "top_pages": [
+          16,
+          21,
+          28,
+          21,
+          21
+        ],
+        "top_texts": [
+          "Model Angle (in Degree) 642, 742, 943,1043 55 1055, 1255 45",
+          "2.2.8 Tires  Note:  Wheel lug nut torque is 350-400 lb-ft (475-542 Nm)  Note:  P",
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2"
+        ]
+      },
+      {
+        "query_id": "Q02",
+        "query": "wheel lug nut torque specification",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 104.8,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          19,
+          19,
+          21,
+          28,
+          30
+        ],
+        "top_texts": [
+          "Description Specifications 742, 943 Engine Make/Model Cummins QSF3.8 Displacemen",
+          "Description Specifications 642, 943, 1043 1055, 1255 Engine Make/Model Cummins Q",
+          "2.2.8 Tires  Note:  Wheel lug nut torque is 350-400 lb-ft (475-542 Nm)  Note:  P"
+        ]
+      },
+      {
+        "query_id": "Q03",
+        "query": "engine oil capacity 642",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 125.8,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          25,
+          27,
+          26,
+          31,
+          28
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q04",
+        "query": "fuel tank capacity",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 95.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          27,
+          26,
+          25,
+          30,
+          32
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q05",
+        "query": "hydraulic system capacity 642 with outriggers",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 108.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          25,
+          27,
+          26,
+          7,
+          12
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q06",
+        "query": "hydraulic system capacity 642 no outriggers",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 103.4,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          25,
+          27,
+          26,
+          17,
+          7
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q07",
+        "query": "DEF tank capacity",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 89.2,
+        "results_count": 9,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          27,
+          26,
+          32,
+          25,
+          28
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE"
+        ]
+      },
+      {
+        "query_id": "Q08",
+        "query": "cooling system capacity",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 93.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          27,
+          25,
+          6,
+          12
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q09",
+        "query": "transmission oil capacity including cooler",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 122.5,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          27,
+          25,
+          29,
+          28
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q10",
+        "query": "brake fluid capacity",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 83.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          27,
+          26,
+          25,
+          28,
+          23
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q11",
+        "query": "how often to change hydraulic fluid",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 69.8,
+        "results_count": 10,
+        "recall_1": 0.0,
+        "recall_3": 0.0,
+        "recall_5": 0.0,
+        "recall_10": 1.0,
+        "precision_5": 0.0,
+        "mrr": 0.16666666666666666,
+        "top_pages": [
+          27,
+          26,
+          25,
+          29,
+          11
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q12",
+        "query": "engine oil change interval ULS with synthetic oil",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 95.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          31,
+          30,
+          29,
+          28,
+          32
+        ],
+        "top_texts": [
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change ",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O"
+        ]
+      },
+      {
+        "query_id": "Q13",
+        "query": "engine oil change interval LS conventional oil",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 76.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          31,
+          30,
+          29,
+          23,
+          24
+        ],
+        "top_texts": [
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change ",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O"
+        ]
+      },
+      {
+        "query_id": "Q14",
+        "query": "when to change axle oil",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 68.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          29,
+          27,
+          26,
+          25,
+          30
+        ],
+        "top_texts": [
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q15",
+        "query": "hydraulic tank breather change interval",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 69.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          30,
+          27,
+          26,
+          25,
+          32
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change ",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q16",
+        "query": "hydraulic filter change interval",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 98.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          30,
+          31,
+          29,
+          32,
+          27
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change ",
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O"
+        ]
+      },
+      {
+        "query_id": "Q17",
+        "query": "how to safely remove coolant system cap",
+        "query_type": "procedure",
+        "mode": "bm25",
+        "latency_ms": 68.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          11,
+          10,
+          27,
+          25
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish"
+        ]
+      },
+      {
+        "query_id": "Q18",
+        "query": "what safety gear to wear when performing maintenance",
+        "query_type": "diagnostic",
+        "mode": "bm25",
+        "latency_ms": 72.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          11,
+          12,
+          10,
+          5,
+          16
+        ],
+        "top_texts": [
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish"
+        ]
+      },
+      {
+        "query_id": "Q19",
+        "query": "do not service machine near open flame",
+        "query_type": "diagnostic",
+        "mode": "bm25",
+        "latency_ms": 74.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          10,
+          4,
+          11,
+          15
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "Modifications  Modifications to this machine may affect compliance with Industry"
+        ]
+      },
+      {
+        "query_id": "Q20",
+        "query": "stop engine before performing service",
+        "query_type": "procedure",
+        "mode": "bm25",
+        "latency_ms": 90.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          11,
+          10,
+          15,
+          28
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish"
+        ]
+      },
+      {
+        "query_id": "Q21",
+        "query": "where is the machine serial number located",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 62.4,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          15,
+          10,
+          6,
+          11,
+          4
+        ],
+        "top_texts": [
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "Section Subject Page Section 5 Axles, Drive Shafts, Wheels and Tires ..........."
+        ]
+      },
+      {
+        "query_id": "Q22",
+        "query": "replacement parts warranty information",
+        "query_type": "general",
+        "mode": "bm25",
+        "latency_ms": 77.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          15,
+          5,
+          6,
+          13,
+          12
+        ],
+        "top_texts": [
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat",
+          "Section Subject Page Section 1 Safety Practices ................................",
+          "Section Subject Page Section 5 Axles, Drive Shafts, Wheels and Tires ..........."
+        ]
+      },
+      {
+        "query_id": "Q23",
+        "query": "which models does this manual cover",
+        "query_type": "general",
+        "mode": "bm25",
+        "latency_ms": 54.6,
+        "results_count": 9,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          1,
+          10,
+          4,
+          11,
+          15
+        ],
+        "top_texts": [
+          "Service Manual  Models 642, 742, 943, 1043, 1055, 1255  31211033  April 11 , 201",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "Modifications  Modifications to this machine may affect compliance with Industry"
+        ]
+      },
+      {
+        "query_id": "Q24",
+        "query": "what is the difference between ULS and LS machine configuration",
+        "query_type": "comparison",
+        "mode": "bm25",
+        "latency_ms": 89.5,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          4,
+          15,
+          10,
+          11,
+          12
+        ],
+        "top_texts": [
+          "Modifications  Modifications to this machine may affect compliance with Industry",
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish"
+        ]
+      },
+      {
+        "query_id": "Q25",
+        "query": "DEF strainer cleaning interval",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 296.2,
+        "results_count": 2,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          32,
+          28
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE",
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2"
+        ]
+      },
+      {
+        "query_id": "Q26",
+        "query": "engine valve lash adjustment schedule",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 72.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          32,
+          6,
+          5,
+          29,
+          33
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE",
+          "Section Subject Page Section 5 Axles, Drive Shafts, Wheels and Tires ...........",
+          "Section Subject Page Section 1 Safety Practices ................................"
+        ]
+      },
+      {
+        "query_id": "Q27",
+        "query": "check transmission oil level frequency",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 118.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          28,
+          29,
+          30,
+          6,
+          31
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change "
+        ]
+      },
+      {
+        "query_id": "Q28",
+        "query": "what must be approved before modifying the machine",
+        "query_type": "general",
+        "mode": "bm25",
+        "latency_ms": 90.5,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          4,
+          15,
+          11,
+          12,
+          10
+        ],
+        "top_texts": [
+          "Modifications  Modifications to this machine may affect compliance with Industry",
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef"
+        ]
+      },
+      {
+        "query_id": "Q29",
+        "query": "hydraulic pressure fluid penetration skin injury",
+        "query_type": "diagnostic",
+        "mode": "bm25",
+        "latency_ms": 160.8,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          28,
+          11,
+          23,
+          24
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef"
+        ]
+      },
+      {
+        "query_id": "Q30",
+        "query": "tire pressure for model 1255",
+        "query_type": "lookup",
+        "mode": "bm25",
+        "latency_ms": 108.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          16,
+          28,
+          21,
+          21,
+          21
+        ],
+        "top_texts": [
+          "Model Angle (in Degree) 642, 742, 943,1043 55 1055, 1255 45",
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2",
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH"
+        ]
+      }
+    ],
+    "hybrid": [
+      {
+        "query_id": "Q01",
+        "query": "tire pressure for model 642",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 822.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          21,
+          16,
+          21,
+          21,
+          21
+        ],
+        "top_texts": [
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH",
+          "Model Angle (in Degree) 642, 742, 943,1043 55 1055, 1255 45",
+          "2.2.8 Tires  Note:  Wheel lug nut torque is 350-400 lb-ft (475-542 Nm)  Note:  P"
+        ]
+      },
+      {
+        "query_id": "Q02",
+        "query": "wheel lug nut torque specification",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 1574.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          19,
+          19,
+          21,
+          28,
+          30
+        ],
+        "top_texts": [
+          "Description Specifications 642, 943, 1043 1055, 1255 Engine Make/Model Cummins Q",
+          "Description Specifications 742, 943 Engine Make/Model Cummins QSF3.8 Displacemen",
+          "2.2.8 Tires  Note:  Wheel lug nut torque is 350-400 lb-ft (475-542 Nm)  Note:  P"
+        ]
+      },
+      {
+        "query_id": "Q03",
+        "query": "engine oil capacity 642",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 1232.4,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          25,
+          26,
+          27,
+          26,
+          25
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q04",
+        "query": "fuel tank capacity",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 958.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          27,
+          26,
+          25,
+          32,
+          19
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q05",
+        "query": "hydraulic system capacity 642 with outriggers",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 404.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          25,
+          7,
+          26,
+          27,
+          17
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Section Subject Page Section 8 Hydraulic System ................................",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q06",
+        "query": "hydraulic system capacity 642 no outriggers",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 369.4,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          25,
+          7,
+          17,
+          27,
+          26
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Section Subject Page Section 8 Hydraulic System ................................",
+          "2.2.4 Hydraulic Cylinder Performance  Note: Machine with no attachment or load, "
+        ]
+      },
+      {
+        "query_id": "Q07",
+        "query": "DEF tank capacity",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 491.7,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          27,
+          25,
+          32,
+          28
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q08",
+        "query": "cooling system capacity",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 355.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          24,
+          27,
+          25,
+          18
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Compartment or System Viscosities Ambient Temperature Range Type and Classificat",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q09",
+        "query": "transmission oil capacity including cooler",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 421.7,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          26,
+          27,
+          25,
+          29,
+          25
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q10",
+        "query": "brake fluid capacity",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 354.8,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          27,
+          26,
+          25,
+          28,
+          23
+        ],
+        "top_texts": [
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall",
+          "Capacity with Filter Change 14 quarts (13,2 liters) Fuel Tank Capacity 38.3 gall"
+        ]
+      },
+      {
+        "query_id": "Q11",
+        "query": "how often to change hydraulic fluid",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 352.4,
+        "results_count": 10,
+        "recall_1": 0.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 0.5,
+        "top_pages": [
+          29,
+          31,
+          30,
+          12,
+          27
+        ],
+        "top_texts": [
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change "
+        ]
+      },
+      {
+        "query_id": "Q12",
+        "query": "engine oil change interval ULS with synthetic oil",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 354.1,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          31,
+          29,
+          30,
+          28,
+          32
+        ],
+        "top_texts": [
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change "
+        ]
+      },
+      {
+        "query_id": "Q13",
+        "query": "engine oil change interval LS conventional oil",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 349.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          31,
+          29,
+          30,
+          28,
+          26
+        ],
+        "top_texts": [
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change "
+        ]
+      },
+      {
+        "query_id": "Q14",
+        "query": "when to change axle oil",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 366.6,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          29,
+          31,
+          30,
+          12,
+          23
+        ],
+        "top_texts": [
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change "
+        ]
+      },
+      {
+        "query_id": "Q15",
+        "query": "hydraulic tank breather change interval",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 338.6,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          30,
+          31,
+          32,
+          29,
+          25
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change ",
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE"
+        ]
+      },
+      {
+        "query_id": "Q16",
+        "query": "hydraulic filter change interval",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 326.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          31,
+          30,
+          29,
+          32,
+          7
+        ],
+        "top_texts": [
+          "2.4.9 Every 1000 Hours  Note: If using fully synthetic oil, metal engine oil fil",
+          "General Information and Specifications  2.4.6 First 500 Hours or 1 Year  Change ",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O"
+        ]
+      },
+      {
+        "query_id": "Q17",
+        "query": "how to safely remove coolant system cap",
+        "query_type": "procedure",
+        "mode": "hybrid",
+        "latency_ms": 365.5,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          11,
+          10,
+          24,
+          23
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish"
+        ]
+      },
+      {
+        "query_id": "Q18",
+        "query": "what safety gear to wear when performing maintenance",
+        "query_type": "diagnostic",
+        "mode": "hybrid",
+        "latency_ms": 347.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          11,
+          10,
+          12,
+          5,
+          9
+        ],
+        "top_texts": [
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf"
+        ]
+      },
+      {
+        "query_id": "Q19",
+        "query": "do not service machine near open flame",
+        "query_type": "diagnostic",
+        "mode": "hybrid",
+        "latency_ms": 344.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          10,
+          4,
+          11,
+          5
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "Modifications  Modifications to this machine may affect compliance with Industry"
+        ]
+      },
+      {
+        "query_id": "Q20",
+        "query": "stop engine before performing service",
+        "query_type": "procedure",
+        "mode": "hybrid",
+        "latency_ms": 398.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          12,
+          10,
+          11,
+          19,
+          28
+        ],
+        "top_texts": [
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef"
+        ]
+      },
+      {
+        "query_id": "Q21",
+        "query": "where is the machine serial number located",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 370.2,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          15,
+          10,
+          11,
+          6,
+          4
+        ],
+        "top_texts": [
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef"
+        ]
+      },
+      {
+        "query_id": "Q22",
+        "query": "replacement parts warranty information",
+        "query_type": "general",
+        "mode": "hybrid",
+        "latency_ms": 361.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          15,
+          13,
+          6,
+          36,
+          14
+        ],
+        "top_texts": [
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat",
+          "PARAGRAPH TITLE PAGE 2.1 Replacement Parts and Warranty Information. . . . . . .",
+          "Section Subject Page Section 5 Axles, Drive Shafts, Wheels and Tires ..........."
+        ]
+      },
+      {
+        "query_id": "Q23",
+        "query": "which models does this manual cover",
+        "query_type": "general",
+        "mode": "hybrid",
+        "latency_ms": 345.5,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          1,
+          10,
+          3,
+          15,
+          4
+        ],
+        "top_texts": [
+          "Service Manual  Models 642, 742, 943, 1043, 1055, 1255  31211033  April 11 , 201",
+          "1.1 INTRODUCTION  This service manual provides general directions for accomplish",
+          "DATE REVISION DESCRIPTION April 28, 2015 A Original Issue Of Manual October 30, "
+        ]
+      },
+      {
+        "query_id": "Q24",
+        "query": "what is the difference between ULS and LS machine configuration",
+        "query_type": "comparison",
+        "mode": "hybrid",
+        "latency_ms": 351.9,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          4,
+          28,
+          32,
+          30,
+          23
+        ],
+        "top_texts": [
+          "Modifications  Modifications to this machine may affect compliance with Industry",
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2",
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE"
+        ]
+      },
+      {
+        "query_id": "Q25",
+        "query": "DEF strainer cleaning interval",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 726.8,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.6,
+        "mrr": 1.0,
+        "top_pages": [
+          32,
+          28,
+          33,
+          29,
+          11
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE",
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2",
+          "2.5 LUBRICATION SCHEDULE  2.5.1 50 Hour  a. 642, 742, 943 & 1043"
+        ]
+      },
+      {
+        "query_id": "Q26",
+        "query": "engine valve lash adjustment schedule",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 569.0,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.2,
+        "mrr": 1.0,
+        "top_pages": [
+          32,
+          33,
+          29,
+          30,
+          19
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4.11 Every 2000 Hours  Clean Engine DE",
+          "2.5 LUBRICATION SCHEDULE  2.5.1 50 Hour  a. 642, 742, 943 & 1043",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O"
+        ]
+      },
+      {
+        "query_id": "Q27",
+        "query": "check transmission oil level frequency",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 411.3,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.4,
+        "mrr": 1.0,
+        "top_pages": [
+          28,
+          29,
+          27,
+          26,
+          31
+        ],
+        "top_texts": [
+          "General Information and Specifications  2.4 SERVICE AND MAINTENANCE SCHEDULES  2",
+          "2.4.3 Every 50 Hours  Lubrication Schedule  2.4.4 First 250 Hours  Change Axle O",
+          "c. 1055, 1255  Engine Crankcase Oil  General Information and Specifications"
+        ]
+      },
+      {
+        "query_id": "Q28",
+        "query": "what must be approved before modifying the machine",
+        "query_type": "general",
+        "mode": "hybrid",
+        "latency_ms": 384.6,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 0.8,
+        "mrr": 1.0,
+        "top_pages": [
+          4,
+          11,
+          15,
+          10,
+          12
+        ],
+        "top_texts": [
+          "Modifications  Modifications to this machine may affect compliance with Industry",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef",
+          "2.1 REPLACEMENT PARTS AND WARRANTY INFORMATION  Before ordering parts or initiat"
+        ]
+      },
+      {
+        "query_id": "Q29",
+        "query": "hydraulic pressure fluid penetration skin injury",
+        "query_type": "diagnostic",
+        "mode": "hybrid",
+        "latency_ms": 395.5,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          21,
+          12,
+          11,
+          7,
+          23
+        ],
+        "top_texts": [
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH",
+          "Safety Practices  1.6.4 Operational Hazards  ENGINE: Stop the engine before perf",
+          "1.6 SAFETY INSTRUCTIONS  Following are general safety statements to consider bef"
+        ]
+      },
+      {
+        "query_id": "Q30",
+        "query": "tire pressure for model 1255",
+        "query_type": "lookup",
+        "mode": "hybrid",
+        "latency_ms": 333.8,
+        "results_count": 10,
+        "recall_1": 1.0,
+        "recall_3": 1.0,
+        "recall_5": 1.0,
+        "recall_10": 1.0,
+        "precision_5": 1.0,
+        "mrr": 1.0,
+        "top_pages": [
+          21,
+          21,
+          21,
+          22,
+          28
+        ],
+        "top_texts": [
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH",
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH",
+          "Size Tire Type Minimum Ply/ Star Rating Fill Type Pressure 370/75-28 DuraForceMH"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+# ── Serving-only dependencies ─────────────────────────────────────────────────
+#
+# This file is used ONLY by the Docker serve image.
+# It intentionally excludes the heavy extraction pipeline deps
+# (docling, easyocr, pymupdf) which are only needed during indexing.
+#
+# CPU-only PyTorch:  ~700 MB vs ~2.5 GB for the CUDA variant.
+# sentence-transformers works fine on CPU for inference (BAAI/bge-small-en-v1.5).
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+# PyTorch — CPU-only wheel to keep the image small
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.1.0
+
+# Retrieval
+lancedb>=0.30.0
+sentence-transformers>=3.0.0
+rank-bm25>=0.2.2
+
+# LLM client
+litellm>=1.81.0
+
+# API server + UI
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+gradio>=4.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+tqdm>=4.0.0
+tenacity>=9.1.4
+pydantic>=2.0.0

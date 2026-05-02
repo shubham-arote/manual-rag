@@ -1,0 +1,242 @@
+[
+  {
+    "id": "Q01",
+    "query": "tire pressure for model 642",
+    "query_type": "lookup",
+    "relevant_pages": [21],
+    "must_contain_any": ["76 psi", "5.25 bar", "5.25 Bar", "pneumatic", "pressure"],
+    "notes": "Page 21 tire spec table: 76 psi (5.25 Bar) pneumatic for 370/75-28 tires"
+  },
+  {
+    "id": "Q02",
+    "query": "wheel lug nut torque specification",
+    "query_type": "lookup",
+    "relevant_pages": [21, 28],
+    "must_contain_any": ["350", "400", "lb-ft", "475", "542", "lug nut"],
+    "notes": "Page 21: 350-400 lb-ft (475-542 Nm)"
+  },
+  {
+    "id": "Q03",
+    "query": "engine oil capacity 642",
+    "query_type": "lookup",
+    "relevant_pages": [25],
+    "must_contain_any": ["14 quarts", "13,2 liters", "crankcase", "filter change"],
+    "notes": "Page 25: Capacity with Filter Change = 14 quarts (13.2 liters)"
+  },
+  {
+    "id": "Q04",
+    "query": "fuel tank capacity",
+    "query_type": "lookup",
+    "relevant_pages": [25],
+    "must_contain_any": ["38.3 gallons", "145 liters", "fuel tank"],
+    "notes": "Page 25: Fuel Tank Capacity = 38.3 gallons (145 liters)"
+  },
+  {
+    "id": "Q05",
+    "query": "hydraulic system capacity 642 with outriggers",
+    "query_type": "lookup",
+    "relevant_pages": [25],
+    "must_contain_any": ["41.7 gallons", "158 liters", "outriggers", "hydraulic"],
+    "notes": "Page 25: 642 With Outriggers = 41.7 gallons (158 liters)"
+  },
+  {
+    "id": "Q06",
+    "query": "hydraulic system capacity 642 no outriggers",
+    "query_type": "lookup",
+    "relevant_pages": [25],
+    "must_contain_any": ["40.2 gallons", "152 liters", "no outriggers", "hydraulic"],
+    "notes": "Page 25: 642 No Outriggers = 40.2 gallons (152 liters)"
+  },
+  {
+    "id": "Q07",
+    "query": "DEF tank capacity",
+    "query_type": "lookup",
+    "relevant_pages": [25],
+    "must_contain_any": ["5.7 gallons", "21,5 liters", "def", "diesel exhaust fluid"],
+    "notes": "Page 25: DEF Tank = 5.7 gallons (21.5 liters)"
+  },
+  {
+    "id": "Q08",
+    "query": "cooling system capacity",
+    "query_type": "lookup",
+    "relevant_pages": [25],
+    "must_contain_any": ["5.2 gallons", "19,7 liters", "cooling system"],
+    "notes": "Page 25: Cooling System Capacity = 5.2 gallons (19.7 liters)"
+  },
+  {
+    "id": "Q09",
+    "query": "transmission oil capacity including cooler",
+    "query_type": "lookup",
+    "relevant_pages": [25],
+    "must_contain_any": ["17 quarts", "16,1 liters", "transmission", "cooler"],
+    "notes": "Page 25: Transmission including Cooler and Lines = 17 quarts (16.1 liters)"
+  },
+  {
+    "id": "Q10",
+    "query": "brake fluid capacity",
+    "query_type": "lookup",
+    "relevant_pages": [25],
+    "must_contain_any": ["1.1 quarts", "1,0 liter", "brake fluid"],
+    "notes": "Page 25: Brake Fluid Capacity = 1.1 quarts (1.0 liter)"
+  },
+  {
+    "id": "Q11",
+    "query": "how often to change hydraulic fluid",
+    "query_type": "lookup",
+    "relevant_pages": [31],
+    "must_contain_any": ["1500 hours", "1500", "hydraulic fluid"],
+    "notes": "Page 31: Change Hydraulic Fluid and Filters every 1500 hours"
+  },
+  {
+    "id": "Q12",
+    "query": "engine oil change interval ULS with synthetic oil",
+    "query_type": "lookup",
+    "relevant_pages": [31],
+    "must_contain_any": ["1,000 hours", "1000 hours", "synthetic", "oil change"],
+    "notes": "Page 31: Synthetic oil = 1000 hours or 1 year"
+  },
+  {
+    "id": "Q13",
+    "query": "engine oil change interval LS conventional oil",
+    "query_type": "lookup",
+    "relevant_pages": [30, 31],
+    "must_contain_any": ["500 hours", "6 months", "conventional", "engine oil"],
+    "notes": "Page 30/31: LS conventional oil = 500 hours or 6 months"
+  },
+  {
+    "id": "Q14",
+    "query": "when to change axle oil",
+    "query_type": "lookup",
+    "relevant_pages": [29],
+    "must_contain_any": ["250 hours", "axle oil", "first 250"],
+    "notes": "Page 29: First 250 Hours - Change Axle Oil"
+  },
+  {
+    "id": "Q15",
+    "query": "hydraulic tank breather change interval",
+    "query_type": "lookup",
+    "relevant_pages": [30],
+    "must_contain_any": ["750 hours", "breather", "hydraulic tank"],
+    "notes": "Page 30: Every 750 Hours - Change Hydraulic Tank Breather"
+  },
+  {
+    "id": "Q16",
+    "query": "hydraulic filter change interval",
+    "query_type": "lookup",
+    "relevant_pages": [30, 31],
+    "must_contain_any": ["750 hours", "1500 hours", "hydraulic filter"],
+    "notes": "Pages 30/31: Hydraulic Filters at 750h and 1500h"
+  },
+  {
+    "id": "Q17",
+    "query": "how to safely remove coolant system cap",
+    "query_type": "procedure",
+    "relevant_pages": [12],
+    "must_contain_any": ["coolant", "cap", "pressure", "first stop", "burns"],
+    "notes": "Page 12: Safety instructions for removing pressurised coolant cap"
+  },
+  {
+    "id": "Q18",
+    "query": "what safety gear to wear when performing maintenance",
+    "query_type": "diagnostic",
+    "relevant_pages": [11],
+    "must_contain_any": ["gloves", "safety glasses", "protective clothing", "safety gear", "respirator"],
+    "notes": "Page 11: Personal safety gear section"
+  },
+  {
+    "id": "Q19",
+    "query": "do not service machine near open flame",
+    "query_type": "diagnostic",
+    "relevant_pages": [12],
+    "must_contain_any": ["open flame", "flammable", "fire", "explosion", "fuel"],
+    "notes": "Page 12: FLUID FLAMMABILITY warning"
+  },
+  {
+    "id": "Q20",
+    "query": "stop engine before performing service",
+    "query_type": "procedure",
+    "relevant_pages": [12],
+    "must_contain_any": ["stop the engine", "engine", "service", "performing"],
+    "notes": "Page 12: ENGINE safety instruction"
+  },
+  {
+    "id": "Q21",
+    "query": "where is the machine serial number located",
+    "query_type": "lookup",
+    "relevant_pages": [15],
+    "must_contain_any": ["serial number", "left front tire", "frame"],
+    "notes": "Page 15: Serial number plate on frame behind left front tire"
+  },
+  {
+    "id": "Q22",
+    "query": "replacement parts warranty information",
+    "query_type": "general",
+    "relevant_pages": [15],
+    "must_contain_any": ["warranty", "replacement", "parts", "dealer"],
+    "notes": "Page 15: Parts and warranty section"
+  },
+  {
+    "id": "Q23",
+    "query": "which models does this manual cover",
+    "query_type": "general",
+    "relevant_pages": [1, 4],
+    "must_contain_any": ["642", "742", "943", "1043", "1055", "1255"],
+    "notes": "Page 1: Cover page lists all 6 models"
+  },
+  {
+    "id": "Q24",
+    "query": "what is the difference between ULS and LS machine configuration",
+    "query_type": "comparison",
+    "relevant_pages": [4],
+    "must_contain_any": ["uls", "ls", "ultra low sulfur", "low sulfur", "configuration", "decal"],
+    "notes": "Page 4: Explains ULS vs LS configuration selection"
+  },
+  {
+    "id": "Q25",
+    "query": "DEF strainer cleaning interval",
+    "query_type": "lookup",
+    "relevant_pages": [32],
+    "must_contain_any": ["2000 hours", "def strainer", "clean"],
+    "notes": "Page 32: Every 2000 Hours - Clean Engine DEF Strainer"
+  },
+  {
+    "id": "Q26",
+    "query": "engine valve lash adjustment schedule",
+    "query_type": "lookup",
+    "relevant_pages": [32],
+    "must_contain_any": ["5000 hours", "valve lash", "adjustment"],
+    "notes": "Page 32: Every 5000 Hours - Engine Valve Lash Adjustment"
+  },
+  {
+    "id": "Q27",
+    "query": "check transmission oil level frequency",
+    "query_type": "lookup",
+    "relevant_pages": [28],
+    "must_contain_any": ["10 hours", "transmission oil", "check"],
+    "notes": "Page 28: Every 10 Hours - Check Transmission Oil Level"
+  },
+  {
+    "id": "Q28",
+    "query": "what must be approved before modifying the machine",
+    "query_type": "general",
+    "relevant_pages": [4],
+    "must_contain_any": ["modification", "approved", "jlg", "industry standards"],
+    "notes": "Page 4: All modifications must be approved by JLG"
+  },
+  {
+    "id": "Q29",
+    "query": "hydraulic pressure fluid penetration skin injury",
+    "query_type": "diagnostic",
+    "relevant_pages": [12],
+    "must_contain_any": ["penetrate", "skin", "infection", "hydraulic", "pressure"],
+    "notes": "Page 12: Fluid under pressure safety warning"
+  },
+  {
+    "id": "Q30",
+    "query": "tire pressure for model 1255",
+    "query_type": "lookup",
+    "relevant_pages": [22],
+    "must_contain_any": ["1255", "psi", "bar", "tire", "pressure"],
+    "notes": "Page 22: Tire specs for 1255"
+  }
+]

@@ -1,0 +1,29 @@
+# Environment
+.env
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Pipeline output (generated — not tracked in git)
+output/
+
+# Vector index (generated — not tracked in git)
+index/
+lancedb_index/
+
+# PDFs — copyrighted or too large; track only public-domain ones explicitly
+data/*.pdf
+# Uncomment below to allow the HMMWV public-domain manual:
+# !data/hmmwv_tm.pdf
+
+# OS
+.DS_Store
+Thumbs.db

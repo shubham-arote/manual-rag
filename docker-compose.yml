@@ -1,0 +1,79 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  PDF RAG — local development with Docker Compose
+#
+#  Services
+#  --------
+#  api     FastAPI server (serving only — no extraction pipeline)
+#  index   One-shot indexing container (run this first when adding a new PDF)
+#
+#  Quick start
+#  -----------
+#    # 1. Copy your PDF into ./data/
+#    # 2. Index it (first time, or after adding a new PDF):
+#    docker compose run --rm index --pdf data/your_manual.pdf
+#
+#    # 3. Start the API server:
+#    docker compose up api
+#    open http://localhost:8000/docs
+#
+#  Re-indexing
+#  -----------
+#    docker compose run --rm index --pdf data/new_manual.pdf --no-skip
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── API server ─────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime        # skip model-download stage in compose (already cached)
+    image: pdf-rag-api:local
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env                 # GROQ_API_KEY / OPENROUTER_API_KEY / TEXT_MODEL / etc.
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Mount index + output as volumes so you don't need to rebuild the image
+      # every time you index a new PDF.
+      - ./lancedb_index:/app/lancedb_index
+      - ./output:/app/output
+      # Hot-reload source (optional — remove in production)
+      - ./pdf_rag:/app/pdf_rag
+      - ./scripts:/app/scripts
+    command: >
+      python scripts/index_and_serve.py api
+        --index-dir lancedb_index
+        --out       output
+        --port      8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    restart: unless-stopped
+
+  # ── One-shot indexing service ──────────────────────────────────────────────
+  # Not started by `docker compose up` — only run explicitly:
+  #   docker compose run --rm index --pdf data/manual.pdf
+  index:
+    build:
+      context: .
+      dockerfile: Dockerfile.index   # heavier image with extraction pipeline
+    profiles:
+      - index                        # excluded from default `up`
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./data:/app/data
+      - ./lancedb_index:/app/lancedb_index
+      - ./output:/app/output
+    entrypoint: ["python", "scripts/index_and_serve.py", "index", "--out", "output", "--index-dir", "lancedb_index"]
+    # Additional args passed via: docker compose run --rm index --pdf data/manual.pdf

@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  Railway deployment configuration
+#  https://docs.railway.app/reference/config-as-code
+#
+#  Deploy steps
+#  ------------
+#  1. Build the image locally (index must be pre-built):
+#       docker build -t pdf-rag-api .
+#
+#  2. Push to a registry (Docker Hub or Railway's own):
+#       # Docker Hub:
+#       docker tag pdf-rag-api <your-dockerhub-user>/pdf-rag-api:latest
+#       docker push <your-dockerhub-user>/pdf-rag-api:latest
+#
+#       # Railway container registry:
+#       railway login
+#       railway up --dockerfile Dockerfile
+#
+#  3. Set secrets in Railway dashboard → Variables:
+#       GROQ_API_KEY   = <your key>
+#       TEXT_MODEL     = groq/llama-3.1-8b-instant
+#       ANSWER_MODEL   = groq/llama-3.1-8b-instant
+#
+#  4. Railway auto-detects the Dockerfile on `railway up` or git push.
+# ─────────────────────────────────────────────────────────────────────────────
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# PORT is injected by Railway; the --port flag reads $PORT.
+startCommand = "sh -c 'manual-rag api --index-dir lancedb_index --out output --port ${PORT:-8000}'"
+healthcheckPath = "/health"
+healthcheckTimeout = 120      # seconds — allow encoder warm-up
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3

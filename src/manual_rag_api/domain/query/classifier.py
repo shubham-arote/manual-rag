@@ -25,9 +25,15 @@ Public API
 
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from manual_rag_api.infrastructure.db.searcher import Searcher
+
+logger = logging.getLogger(__name__)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -56,7 +62,7 @@ class DomainConfig:
         Map of keyword (lowercase) → canonical component name.
         Default: common heavy-equipment subsystem names.
     """
-    model_pattern: str = r'\b\d{3,4}\b'
+    model_pattern: str = r'(?:model\s+|^|\s)(\d{3,4})(?:\s|$|[,;])'
     error_code_pattern: str = r'\b(?:SPN|DTC|FMI|fault\s*code|error\s*code)[\s\-]?\d+\b'
     component_keywords: Dict[str, str] = field(default_factory=lambda: {
         "hydraulic":      "Hydraulic System",
@@ -74,6 +80,89 @@ class DomainConfig:
         "alternator":     "Electrical",
         "wiring":         "Electrical",
     })
+
+
+    @classmethod
+    def from_index(cls, searcher: "Searcher") -> "DomainConfig":
+        """
+        Build a DomainConfig from whatever is actually stored in the LanceDB index.
+
+        Called once at server startup.  Reads model_applicability and
+        component_type columns from every chunk — no LLM calls, no hardcoded
+        assumptions about what the manual contains.
+
+        Works for any domain:
+          - Equipment manual  → models like ["642","1255"], components ["Hydraulic System"]
+          - Medical device    → models like ["XR-7000","XR-7200"], components ["Pump","Catheter"]
+          - Automotive        → models like ["F-150","Ranger"], components ["Engine","Brake"]
+          - Empty index       → falls back to safe defaults silently
+
+        The generated model_pattern uses literal alternation of known model names
+        (longest first to prevent prefix shadowing) rather than a generic digit
+        pattern, so it never false-positives on measurements like "1500 rpm".
+        """
+        try:
+            tbl = searcher._get_table()
+            rows = (
+                tbl.search()
+                   .select(["model_applicability", "component_type"])
+                   .limit(999_999)
+                   .to_list()
+            )
+
+            # ── Collect real model names ──────────────────────────────────
+            raw_models: List[str] = sorted(set(
+                m.strip()
+                for r in rows
+                for m in (r.get("model_applicability") or [])
+                if m and m.strip()
+            ))
+
+            if raw_models:
+                # Sort longest first so "D 1001 APG" matches before "D 601"
+                escaped = [re.escape(m) for m in sorted(raw_models, key=len, reverse=True)]
+                model_pat = r"(?<!\w)(" + "|".join(escaped) + r")(?!\w)"
+                logger.info(
+                    "DomainConfig: %d model names learned from index  (e.g. %s)",
+                    len(raw_models), raw_models[:5],
+                )
+            else:
+                # Safe fallback: "model 642" style references
+                model_pat = r"(?:model\s+)(\d{2,6})"
+                logger.info("DomainConfig: no model tags in index — using fallback pattern.")
+
+            # ── Collect component types ───────────────────────────────────
+            comp_types: List[str] = sorted(set(
+                r["component_type"].strip()
+                for r in rows
+                if r.get("component_type") and r["component_type"].strip()
+            ))
+
+            if comp_types:
+                component_kw = {c.lower(): c for c in comp_types}
+                # Also index individual words so "Hydraulic System" → keyword "hydraulic"
+                for c in comp_types:
+                    for word in c.lower().split():
+                        if len(word) >= 4 and word not in component_kw:
+                            component_kw[word] = c
+                logger.info(
+                    "DomainConfig: %d component types learned  (e.g. %s)",
+                    len(comp_types), comp_types[:5],
+                )
+            else:
+                component_kw = cls.__dataclass_fields__["component_keywords"].default_factory()
+                logger.info("DomainConfig: no component types in index — using defaults.")
+
+            return cls(
+                model_pattern      = model_pat,
+                component_keywords = component_kw,
+            )
+
+        except Exception as exc:
+            logger.warning(
+                "DomainConfig.from_index() failed (%s) — using defaults.", exc
+            )
+            return cls()
 
 
 # Singleton default config — used when no domain config is provided
@@ -189,13 +278,16 @@ def extract_metadata(
     cfg = config or _DEFAULT_CONFIG
     q   = query.strip()
 
-    # Detect model numbers
-    models = re.findall(cfg.model_pattern, q)
+    # Detect model numbers — strip surrounding whitespace from each match
+    raw_models = re.findall(cfg.model_pattern, q)
+    # findall returns the capture group (a string) when there is exactly one group;
+    # strip in case the surrounding context chars were captured too.
+    models = [m.strip() if isinstance(m, str) else m[0].strip() for m in raw_models]
     # Deduplicate while preserving order
     seen:   set        = set()
     unique_models: List[str] = []
     for m in models:
-        if m not in seen:
+        if m and m not in seen:
             seen.add(m)
             unique_models.append(m)
 

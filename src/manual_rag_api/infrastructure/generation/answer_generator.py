@@ -38,10 +38,10 @@ from manual_rag_api.infrastructure.llm_providers.litellm_client import LitellmCl
 logger = logging.getLogger(__name__)
 
 # Maximum total characters sent to the LLM as context.
-_MAX_CONTEXT_CHARS = 12_000
+_MAX_CONTEXT_CHARS = 18_000
 
 # Per-chunk truncation limit — prevents one huge page eating the full budget.
-_MAX_CHUNK_CHARS = 2_000
+_MAX_CHUNK_CHARS = 3_000
 
 # Aliases kept for backward compatibility within this file
 _SYSTEM_PROMPT = SYSTEM_PROMPT
@@ -152,10 +152,17 @@ class AnswerGenerator:
 
         raw_response = self._call_llm(query, context, model, template)
 
+        logger.info("RAW LLM RESPONSE:\n%s", raw_response)
+
         parsed = _parse_json_response(raw_response)
         answer_text  = parsed.get("answer", raw_response).strip()
         missing_info = parsed.get("missing_info", "").strip()
         raw_citations = parsed.get("citations", [])
+
+        logger.info(
+            "Parsed: answer_len=%d  citations=%d  missing=%r",
+            len(answer_text), len(raw_citations), missing_info[:80] if missing_info else "",
+        )
 
         citations = _build_citations(raw_citations, active_results)
 
@@ -308,30 +315,47 @@ def _parse_json_response(raw: str) -> dict:
     """
     Extract JSON from the LLM response.
 
-    Handles three common formats:
+    Handles four common formats:
       1. Pure JSON object
       2. JSON wrapped in ```json ... ``` fences
       3. JSON embedded anywhere in a text response (regex extraction)
+      4. Partial/truncated JSON — extract "answer" field via regex as last resort
 
     Falls back to {"answer": raw} on all parse failures — never raises.
     """
     text = raw.strip()
 
+    # Strip markdown fences
     text = re.sub(r"^```(?:json)?\s*", "", text)
     text = re.sub(r"\s*```$",          "", text)
     text = text.strip()
 
+    # Try direct parse
     try:
         return json.loads(text)
     except json.JSONDecodeError:
         pass
 
+    # Try extracting the outermost JSON object
     match = re.search(r"\{.*\}", text, re.DOTALL)
     if match:
         try:
             return json.loads(match.group())
         except json.JSONDecodeError:
-            pass
+            # Try fixing common issues: trailing commas, unescaped newlines
+            fixed = re.sub(r",\s*([}\]])", r"\1", match.group())  # trailing commas
+            fixed = re.sub(r"\n", r"\\n", fixed)                   # bare newlines inside strings
+            try:
+                return json.loads(fixed)
+            except json.JSONDecodeError:
+                pass
+
+    # Last resort: pull just the answer text via regex (citations will be empty)
+    answer_match = re.search(r'"answer"\s*:\s*"((?:[^"\\]|\\.)*)"', text, re.DOTALL)
+    if answer_match:
+        answer_text = answer_match.group(1).replace("\\n", "\n").replace('\\"', '"')
+        logger.warning("JSON parse failed — extracted answer field via regex (citations lost).")
+        return {"answer": answer_text, "citations": [], "missing_info": ""}
 
     logger.warning("Could not parse LLM response as JSON — returning raw text.")
     return {"answer": raw, "citations": [], "missing_info": ""}

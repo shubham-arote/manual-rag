@@ -26,7 +26,8 @@ from typing import Generator, List, Optional, Tuple
 import gradio as gr
 
 from manual_rag_api.infrastructure.generation.answer_generator import AnswerGenerator, Citation
-from manual_rag_api.domain.query.filters import SearchFilter, SearchResult, Searcher
+from manual_rag_api.domain.query.filters import SearchFilter, SearchResult
+from manual_rag_api.infrastructure.db.searcher import Searcher
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +71,11 @@ _CSS = """
 /* ── Base ─────────────────────────────────────────────────────────────── */
 .gradio-container { max-width: 1400px !important; margin: 0 auto !important; }
 footer { display: none !important; }
+
+/* ── Stream toggle ────────────────────────────────────────────────────── */
+.stream-toggle label { font-size: 0.78rem !important; color: #64748b !important; }
+.stream-toggle { padding-top: 6px !important; }
+.stream-toggle input[type="checkbox"] { accent-color: #3b82f6; }
 
 /* ── Header ───────────────────────────────────────────────────────────── */
 .rag-header {
@@ -220,7 +226,7 @@ footer { display: none !important; }
 .card-engines { font-size: 0.63rem; color: #94a3b8; margin-left: auto; }
 .page-thumb {
     width: 100%;
-    max-height: 120px;
+    max-height: 120px;   /* overridden to 260px inside .rp-scroll — see bottom of CSS */
     object-fit: contain;
     border-radius: 4px;
     border: 1px solid #e2e8f0;
@@ -252,6 +258,34 @@ footer { display: none !important; }
 
 /* ── Input area tweaks ────────────────────────────────────────────────── */
 .input-row textarea { font-size: 0.9rem !important; }
+
+/* ── Right panel — fixed height, internal scroll ─────────────────────── */
+/*
+   Gradio wraps every gr.HTML in several nested divs.
+   We pin the outermost column so it never grows taller than the chatbot,
+   and let the inner .rp-scroll div absorb overflow.
+*/
+.right-panel-col {
+    max-height: 520px !important;
+    overflow: hidden !important;
+}
+.rp-scroll {
+    height: 460px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 6px;
+    /* thin custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+.rp-scroll::-webkit-scrollbar { width: 5px; }
+.rp-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.rp-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* Thumbnails — taller in the scrollable panel since we have room to scroll */
+.page-thumb {
+    max-height: 260px !important;
+}
 """
 
 
@@ -341,7 +375,7 @@ class ChatUI:
                     )
 
                 # Right — results panel (status + trace + sources)
-                with gr.Column(scale=2):
+                with gr.Column(scale=2, elem_classes=["right-panel-col"]):
                     right_panel = gr.HTML(value=_initial_panel())
 
             # ── Filter row ───────────────────────────────────────────────
@@ -384,11 +418,19 @@ class ChatUI:
                     lines=1,
                     autofocus=True,
                 )
-                send_btn  = gr.Button("Send ➤", variant="primary", scale=1, min_width=90)
-                clear_btn = gr.Button("🗑 Clear", variant="secondary", scale=1, min_width=80)
+                send_btn    = gr.Button("Send ➤", variant="primary", scale=1, min_width=90)
+                clear_btn   = gr.Button("🗑 Clear", variant="secondary", scale=1, min_width=80)
+                stream_chk  = gr.Checkbox(
+                    label="⚡ Stream",
+                    value=False,
+                    scale=0,
+                    min_width=90,
+                    elem_classes=["stream-toggle"],
+                    info=None,
+                )
 
             # ── Events ───────────────────────────────────────────────────
-            _inputs  = [query_box, chatbot, pdf_dd, model_dd, type_dd, top_k_sl]
+            _inputs  = [query_box, chatbot, pdf_dd, model_dd, type_dd, top_k_sl, stream_chk]
             _outputs = [chatbot, right_panel, query_box]
 
             query_box.submit(self._respond, _inputs, _outputs)
@@ -429,17 +471,21 @@ class ChatUI:
         model_filter: str,
         type_filter:  str,
         top_k:        int,
+        stream:       bool = False,
     ) -> Generator:
         """
-        Streaming generator — Gradio streams each yield() to the browser.
+        Response handler — supports both streaming and non-streaming modes.
 
-        Flow
-        ----
-        1. Append user message immediately + "Searching…" placeholder → yield
-        2. Run hybrid search (fast — BM25 + vector, <2 s)
-        3. Update placeholder to "Generating…" → yield
-        4. Stream LLM tokens:  extract partial answer from in-flight JSON → yield
-        5. Replace with final parsed answer + full right panel → yield
+        Stream=False (default)
+        ----------------------
+        Yields only twice: once with a spinner, once with the final answer.
+        The input box stays responsive the entire time and the UI never flickers.
+        Best for follow-up questions.
+
+        Stream=True
+        -----------
+        Yields on every LLM token so the answer appears word by word.
+        Useful to see generation progress on long answers.
         """
         message = message.strip()
         if not message:
@@ -448,7 +494,7 @@ class ChatUI:
 
         t_start = time.perf_counter()
 
-        # ── 1. Show user message + searching indicator ────────────────────
+        # ── 1. Show user message + spinner (one yield) ────────────────────
         new_history = list(history) + [
             {"role": "user",      "content": message},
             {"role": "assistant", "content": "⏳ Searching…"},
@@ -473,14 +519,36 @@ class ChatUI:
 
         t_search = time.perf_counter()
         logger.info("Search: %.2fs  (%d results)", t_search - t_start, len(results))
+        for _i, _r in enumerate(results, 1):
+            _c = _r.chunk
+            logger.info(
+                "  [%d] p%d %s models=%s rank=%.3f vec=%s bm25=%s | %s",
+                _i, _c.page_number, _c.chunk_type,
+                _c.model_applicability or [],
+                _r.rank, _r.matched_vector, _r.matched_bm25,
+                (_c.text or "")[:80].replace("\n", " "),
+            )
 
-        # ── 3. Switch indicator to "Generating…" ─────────────────────────
         new_history[-1]["content"] = "⏳ Generating…"
         yield new_history, _initial_panel(), ""
 
-        # ── 4. Stream LLM tokens ─────────────────────────────────────────
-        # raw_stream accumulates the full LLM output (JSON text).
-        # new_history shows either the extracted partial answer or a spinner.
+        # ── 3a. NON-STREAMING — single blocking call, one final yield ─────
+        if not stream:
+            try:
+                final_answer = self._generator.generate(message, results)
+            except Exception as exc:
+                logger.error("Generation failed: %s", exc, exc_info=True)
+                new_history[-1]["content"] = f"⚠️  Error: {exc}"
+                yield new_history, _error_panel(str(exc)), ""
+                return
+
+            new_history[-1]["content"] = final_answer.answer
+            panel = _build_right_panel(final_answer, results, self._out_dir)
+            yield new_history, panel, ""
+            logger.info("Total (non-stream): %.2fs", time.perf_counter() - t_start)
+            return
+
+        # ── 3b. STREAMING — token-by-token, multiple yields ───────────────
         raw_stream   = ""
         final_answer = None
         try:
@@ -504,12 +572,11 @@ class ChatUI:
         t_llm = time.perf_counter()
         logger.info("LLM stream: %.2fs", t_llm - t_search)
 
-        # ── 5. Final: replace with clean answer + full right panel ────────
         if final_answer is not None:
             new_history[-1]["content"] = final_answer.answer
             panel = _build_right_panel(final_answer, results, self._out_dir)
             yield new_history, panel, ""
-            logger.info("Total query: %.2fs", time.perf_counter() - t_start)
+            logger.info("Total (stream): %.2fs", time.perf_counter() - t_start)
 
     # ── Index data loaders ────────────────────────────────────────────────────
 
@@ -593,24 +660,32 @@ def _partial_answer_from_stream(raw: str) -> str:
 
 def _initial_panel() -> str:
     return (
+        "<div class='rp-scroll'>"
         "<div style='color:#94a3b8;font-size:0.85rem;padding:16px 4px'>"
         "Results will appear here after your first query.</div>"
+        "</div>"
     )
 
 
 def _error_panel(msg: str) -> str:
     return (
+        "<div class='rp-scroll'>"
         "<div style='background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;"
-        "padding:12px 14px;color:#b91c1c;font-size:0.82rem'>"
-        f"⚠️ {msg}</div>"
+        f"padding:12px 14px;color:#b91c1c;font-size:0.82rem'>⚠️ {msg}</div>"
+        "</div>"
     )
 
 
 def _build_right_panel(answer, results: List[SearchResult], output_dir: Path) -> str:
-    """Assemble the full right-panel HTML: status + trace + sources."""
+    """Assemble the full right-panel HTML: status + trace + sources.
+
+    Everything is wrapped in .rp-scroll so the panel stays fixed-height
+    (460 px, matching the chatbot) and scrolls internally — images never
+    push the input field down.
+    """
     q_type = results[0].query_type if results else "general"
     parts  = [
-        "<div>",
+        "<div class='rp-scroll'>",
         _status_html(answer.confidence, q_type),
         _trace_html(results, q_type),
         _sources_html(answer.citations, results, output_dir),

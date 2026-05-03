@@ -32,7 +32,9 @@ logger = logging.getLogger(__name__)
 _TABLE = "chunks"
 
 # ── Sentence-transformer batch size ──────────────────────────────────────────
-_EMBED_BATCH = 64
+# Keep small — large batches trigger native crashes (0xC0000005) on Windows
+# with certain torch/ONNX builds.  16 is safe across all hardware.
+_EMBED_BATCH = 16
 
 
 def _chunk_schema():
@@ -652,7 +654,10 @@ class Indexer:
         """
         encoder       = self._get_encoder()
         model_name    = self._cfg.embedding_model
-        texts         = [c.text for c in chunks]
+        # Truncate to 512 tokens worth of chars — the model's max context window.
+        # Very long texts (image descriptions, flattened tables) can cause native
+        # crashes in the tokenizer on Windows with certain torch builds.
+        texts         = [c.text[:2048] if c.text else " " for c in chunks]
         expected_dim: Optional[int] = None
 
         logger.info(

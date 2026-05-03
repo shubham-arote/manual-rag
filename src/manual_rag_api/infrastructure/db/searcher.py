@@ -95,11 +95,15 @@ class Searcher:
 
     def warm_up(self) -> None:
         """
-        Pre-load the sentence-transformer encoder and BM25 corpus.
+        Pre-load the sentence-transformer encoder, BM25 corpus, and domain config.
 
         Call this once at server startup so the first user query is fast.
+        The domain config is built from the actual index content — no hardcoded
+        model names or component types.
         """
         import time
+        from manual_rag_api.domain.query.classifier import DomainConfig
+
         t0 = time.perf_counter()
         logger.info("Warming up encoder…")
         self._get_encoder()
@@ -114,6 +118,10 @@ class Searcher:
             "BM25 corpus ready — %d docs  (%.1fs)",
             len(self._corpus_ids), time.perf_counter() - t1,
         )
+
+        # Auto-learn domain config from index content
+        logger.info("Building domain config from index…")
+        self._domain_cfg = DomainConfig.from_index(self)
         logger.info("Warm-up complete  (total %.1fs)", time.perf_counter() - t0)
 
     def search(
@@ -232,13 +240,20 @@ class Searcher:
             chunk = chunk_map[cid]
             base  = fused.get(cid, 0.0)
 
-            if chunk.section_path:
+            # Down-rank generic non-technical sections.
+            # Uses fuzzy section-path matching rather than a hardcoded list so it
+            # works across domains.  Only penalises sections that are both (a)
+            # non-specific (specificity_score == 0) AND (b) contain generic section
+            # keywords.  Medical/aviation manuals where safety IS the content will
+            # have high specificity scores on their safety chunks and won't be penalised.
+            if chunk.section_path and chunk.specificity_score == 0:
                 top = chunk.section_path[0].lower()
-                if any(kw in top for kw in (
-                    "safety", "warning", "caution", "warranty",
-                    "introduction", "foreword", "general information",
-                    "general safety", "registration",
-                )):
+                _GENERIC_SECTION_KW = (
+                    "safety", "warranty", "introduction", "foreword",
+                    "general information", "registration", "legal",
+                    "preface", "about this manual", "how to use",
+                )
+                if any(kw in top for kw in _GENERIC_SECTION_KW):
                     base *= 0.65
 
             base *= (1.0 + 0.12 * min(chunk.specificity_score, 5))
@@ -821,10 +836,22 @@ def _passes_list_filters(chunk: Chunk, filters: SearchFilter) -> bool:
     """
     Check whether a chunk passes list-field post-filters.
     Uses ANY-match semantics: passes if ANY requested value is present.
+
+    Model filter semantics
+    ----------------------
+    A chunk with model_applicability=[] is treated as *universal* — it was not
+    tagged with a specific model during indexing, which means it either applies
+    to all models or its applicability is unknown.  Such chunks are always
+    included so that untagged-but-relevant pages (e.g. capacity tables that
+    reference multiple models in their body text) are never silently dropped.
+
+    Only chunks that are *explicitly* tagged with at least one model that is
+    NOT in the requested set are excluded.
     """
     if filters.model_applicability:
         chunk_models = set(chunk.model_applicability)
-        if not chunk_models.intersection(filters.model_applicability):
+        # Empty list → universal chunk; let it through regardless of filter.
+        if chunk_models and not chunk_models.intersection(filters.model_applicability):
             return False
     if filters.application_context:
         chunk_ctx = set(chunk.application_context)

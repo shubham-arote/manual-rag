@@ -401,11 +401,17 @@ def _extract_section_path(section: Any) -> List[str]:
     """
     Convert the LLM-generated 'section' field to a clean List[str].
 
-    The extraction LLM may return:
+    The context-metadata prompt template emits:
+        {"section_number": "...", "section_title": "...",
+         "subsection_number": "...", "subsection_title": "..."}
+    but older extractions / other prompts may return:
         {"title": "...", "subsection": "..."}
         "Section 3 - Hydraulics"
         ["Chapter 2", "Hydraulics"]
         None / missing
+    All forms are handled.  (The template keys were previously NOT read
+    here — every chunk silently got section_path=[]; patch_index.py had
+    the correct reader.  Keep these key lists in sync with the prompt.)
     """
     if not section:
         return []
@@ -415,6 +421,15 @@ def _extract_section_path(section: Any) -> List[str]:
         return [section.strip()] if section.strip() else []
     if isinstance(section, dict):
         path: List[str] = []
+        # Primary: the context_metadata template's key set
+        for key in ("section_number", "section_title",
+                    "subsection_number", "subsection_title"):
+            val = section.get(key)
+            if val and isinstance(val, str) and val.strip():
+                path.append(val.strip())
+        if path:
+            return path
+        # Fallback: legacy key set
         for key in ("title", "subsection", "subsubsection"):
             val = section.get(key)
             if val and isinstance(val, str) and val.strip():

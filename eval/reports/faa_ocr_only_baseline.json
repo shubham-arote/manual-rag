@@ -1,0 +1,57 @@
+{
+  "dataset": "eval\\golden_faa.json",
+  "timestamp": "2026-06-10T20:41:46+00:00",
+  "top_k": 5,
+  "n_scored": 30,
+  "n_adversarial": 2,
+  "hit_at_k": 1.0,
+  "mrr": 0.8861,
+  "mean_latency_s": 0.1867,
+  "by_type": {
+    "comparison": {
+      "n": 2,
+      "hit_at_k": 1.0,
+      "mrr": 1.0
+    },
+    "general": {
+      "n": 14,
+      "hit_at_k": 1.0,
+      "mrr": 0.7916666666666667
+    },
+    "lookup": {
+      "n": 9,
+      "hit_at_k": 1.0,
+      "mrr": 0.9444444444444444
+    },
+    "procedure": {
+      "n": 5,
+      "hit_at_k": 1.0,
+      "mrr": 1.0
+    }
+  },
+  "misses": [],
+  "adversarial": [
+    {
+      "id": "f031",
+      "question": "hydraulic capacity for model 642",
+      "retrieved_pages": [
+        9,
+        1,
+        44,
+        29,
+        15
+      ]
+    },
+    {
+      "id": "f032",
+      "question": "Airbus A320 green hydraulic system pressure",
+      "retrieved_pages": [
+        37,
+        39,
+        34,
+        51,
+        15
+      ]
+    }
+  ]
+}

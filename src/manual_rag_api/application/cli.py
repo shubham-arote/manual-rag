@@ -211,7 +211,7 @@ def _do_index(args: argparse.Namespace) -> Path:
     from manual_rag_api.config import PipelineConfig, RetrievalConfig, get_settings
     from manual_rag_api.infrastructure.monitoring.opik_setup import init_opik
     from manual_rag_api.infrastructure.pipeline import PDFProcessor
-    from manual_rag_api.infrastructure.db.searcher import Indexer
+    from manual_rag_api.infrastructure.db.indexer import Indexer
     from manual_rag_api.infrastructure.llm_providers.litellm_client import LitellmClient
 
     init_opik()

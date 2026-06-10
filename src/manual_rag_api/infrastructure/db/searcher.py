@@ -27,6 +27,7 @@ import logging
 from typing import Dict, List, Optional, Set, Tuple
 
 from manual_rag_api.config import RetrievalConfig
+from manual_rag_api.infrastructure.monitoring.opik_setup import track
 from manual_rag_api.domain.query.classifier import (
     DomainConfig,
     build_auto_filter_kwargs,
@@ -34,6 +35,7 @@ from manual_rag_api.domain.query.classifier import (
 )
 from manual_rag_api.domain.query.filters import CellMatch, SearchFilter, SearchResult
 from manual_rag_api.domain.schema import Chunk, ChunkType
+from manual_rag_api.infrastructure.db.embedder import Embedder
 from manual_rag_api.infrastructure.db.table_querier import TableQuerier
 
 logger = logging.getLogger(__name__)
@@ -106,8 +108,7 @@ class Searcher:
 
         t0 = time.perf_counter()
         logger.info("Warming up encoder…")
-        self._get_encoder()
-        self._get_encoder().encode(["warmup"], show_progress_bar=False)
+        self._get_embedder().warm_up()
         logger.info("Encoder ready  (%.1fs)", time.perf_counter() - t0)
 
         t1 = time.perf_counter()
@@ -124,6 +125,7 @@ class Searcher:
         self._domain_cfg = DomainConfig.from_index(self)
         logger.info("Warm-up complete  (total %.1fs)", time.perf_counter() - t0)
 
+    @track("rag_search")
     def search(
         self,
         query: str,
@@ -516,7 +518,7 @@ class Searcher:
         """
         try:
             tbl   = self._get_table()
-            vec   = self._get_encoder().encode([query], show_progress_bar=False)[0].tolist()
+            vec   = self._get_embedder().embed_query(query)
             where = _build_where(filters)
 
             q = tbl.search(vec).limit(fetch)
@@ -551,7 +553,7 @@ class Searcher:
             return
         try:
             from rank_bm25 import BM25Okapi
-            tokenized        = [m["text"].lower().split() for m in self._corpus_meta]
+            tokenized        = [_tokenize(m["text"]) for m in self._corpus_meta]
             self._bm25_model = BM25Okapi(tokenized)
             logger.debug("BM25 model built over %d docs.", len(self._corpus_ids))
         except Exception as exc:
@@ -576,7 +578,7 @@ class Searcher:
             if self._bm25_model is None:
                 return []
 
-            query_tokens = query.lower().split()
+            query_tokens = _tokenize(query)
             scores       = self._bm25_model.get_scores(query_tokens)
 
             ranked = sorted(
@@ -668,7 +670,7 @@ class Searcher:
             rows = (
                 tbl.search()
                    .where(
-                       f"pdf_name = '{pdf_name}' AND chunk_index = {chunk_index}",
+                       f"pdf_name = '{_sql_quote(pdf_name)}' AND chunk_index = {int(chunk_index)}",
                        prefilter=True,
                    )
                    .limit(1)
@@ -743,11 +745,10 @@ class Searcher:
 
     # ── Lazy initialisers ────────────────────────────────────────────────
 
-    def _get_encoder(self):
+    def _get_embedder(self) -> Embedder:
         if self._encoder is None:
-            from sentence_transformers import SentenceTransformer
-            logger.info("Loading encoder '%s'…", self._cfg.embedding_model)
-            self._encoder = SentenceTransformer(self._cfg.embedding_model)
+            logger.info("Loading embedder '%s'…", self._cfg.embedding_model)
+            self._encoder = Embedder(self._cfg.embedding_model)
         return self._encoder
 
     def _get_table(self):
@@ -774,6 +775,36 @@ class Searcher:
 # ─────────────────────────────────────────────────────────────────────────────
 #  Module-level helpers (pure functions — easy to unit test)
 # ─────────────────────────────────────────────────────────────────────────────
+
+import re as _re_tok
+
+_TOKEN_RE = _re_tok.compile(r"[a-z0-9]+(?:[-_.][a-z0-9]+)*")
+
+
+def _tokenize(text: str) -> List[str]:
+    """
+    BM25 tokenizer: lowercase, strip punctuation, keep alphanumerics.
+
+    Hyphen/underscore/dot-joined identifiers ("29-10-00", "bge-small") are
+    kept whole AND split into parts, so both "29-10-00" and "29" match.
+    Naive str.split() failed on trailing punctuation ("642," ≠ "642") —
+    a real recall cost for spec queries.
+    """
+    if not text:
+        return []
+    tokens: List[str] = []
+    for match in _TOKEN_RE.finditer(text.lower()):
+        tok = match.group()
+        tokens.append(tok)
+        if any(sep in tok for sep in "-_."):
+            tokens.extend(p for p in _re_tok.split(r"[-_.]", tok) if p)
+    return tokens
+
+
+def _sql_quote(value: str) -> str:
+    """Escape single quotes for LanceDB WHERE clause string literals."""
+    return value.replace("'", "''")
+
 
 def _rrf(
     vec_ids:  List[str],
@@ -803,16 +834,16 @@ def _build_where(filters: SearchFilter) -> Optional[str]:
 
     if filters.language:
         clauses.append(
-            f"(language = '{filters.language}' OR language IS NULL)"
+            f"(language = '{_sql_quote(filters.language)}' OR language IS NULL)"
         )
     if filters.pdf_name:
-        clauses.append(f"pdf_name = '{filters.pdf_name}'")
+        clauses.append(f"pdf_name = '{_sql_quote(filters.pdf_name)}'")
     if filters.chunk_type:
-        clauses.append(f"chunk_type = '{filters.chunk_type}'")
+        clauses.append(f"chunk_type = '{_sql_quote(filters.chunk_type)}'")
     if filters.component_type:
-        clauses.append(f"component_type = '{filters.component_type}'")
+        clauses.append(f"component_type = '{_sql_quote(filters.component_type)}'")
     if filters.image_type:
-        clauses.append(f"image_type = '{filters.image_type}'")
+        clauses.append(f"image_type = '{_sql_quote(filters.image_type)}'")
 
     return " AND ".join(clauses) if clauses else None
 

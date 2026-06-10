@@ -45,13 +45,10 @@ from __future__ import annotations
 
 import argparse
 import logging
-import os
 import sys
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-load_dotenv()
+from manual_rag_api.config import get_settings
 
 # ── Logging ──────────────────────────────────────────────────────────────────
 
@@ -96,16 +93,14 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="MODEL",
         help="LiteLLM model for answer generation  (overrides ANSWER_MODEL env var)",
     )
-    # Railway injects PORT as an env var; read it as the default so the
-    # container works even if the shell wrapper doesn't expand $PORT.
-    _default_port = int(os.environ.get("PORT", 7860))
+    _settings = get_settings()
     parent.add_argument(
-        "--port", type=int, default=_default_port,
+        "--port", type=int, default=_settings.server.port,
         help="Server port  [default: $PORT env var, else 7860]",
     )
     parent.add_argument(
         "--host",
-        default="0.0.0.0",
+        default=_settings.server.host,
         metavar="HOST",
         help="Bind host for the server  [default: 0.0.0.0]",
     )
@@ -157,6 +152,25 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     _add_pdf_args(p_run)
 
+    # ── eval sub-command ──────────────────────────────────────────────────────
+    p_eval = sub.add_parser(
+        "eval",
+        parents=[parent],
+        help="Run the retrieval evaluation suite against the current index.",
+    )
+    p_eval.add_argument(
+        "--dataset",
+        default="eval/golden_jlg.json",
+        metavar="FILE",
+        help="Golden dataset JSON  [default: eval/golden_jlg.json]",
+    )
+    p_eval.add_argument(
+        "--report",
+        default=None,
+        metavar="FILE",
+        help="Write JSON report to this path (e.g. eval/reports/baseline.json)",
+    )
+
     return root
 
 
@@ -194,12 +208,14 @@ def _do_index(args: argparse.Namespace) -> Path:
     Returns the pdf_base_path (output_dir / pdf_stem) so the caller
     can pass it straight to the UI.
     """
-    import os
-    from manual_rag_api.config import PipelineConfig, RetrievalConfig
+    from manual_rag_api.config import PipelineConfig, RetrievalConfig, get_settings
+    from manual_rag_api.infrastructure.monitoring.opik_setup import init_opik
     from manual_rag_api.infrastructure.pipeline import PDFProcessor
     from manual_rag_api.infrastructure.db.searcher import Indexer
     from manual_rag_api.infrastructure.llm_providers.litellm_client import LitellmClient
 
+    init_opik()
+    settings   = get_settings()
     pdf_path   = Path(args.pdf_path)
     output_dir = Path(args.output_dir)
 
@@ -225,12 +241,7 @@ def _do_index(args: argparse.Namespace) -> Path:
     )
 
     # ── Optional LLM for table flattening ────────────────────────────────────
-    answer_model = (
-        args.answer_model
-        or os.getenv("TEXT_MODEL")
-        or os.getenv("ANSWER_MODEL")
-        or "groq/llama-3.3-70b-versatile"
-    )
+    answer_model = args.answer_model or settings.llm.get_answer_model()
     try:
         text_client = LitellmClient(model_name=answer_model)
     except Exception as exc:
@@ -251,17 +262,13 @@ def _do_index(args: argparse.Namespace) -> Path:
 
 def _do_api(args: argparse.Namespace, output_dir: Path) -> None:
     """Initialise the service layer and launch uvicorn."""
-    import os
     import uvicorn
+    from manual_rag_api.config import get_settings
     from manual_rag_api.infrastructure.api.dependencies import init_service
     from manual_rag_api.infrastructure.api.main import create_app
 
-    answer_model = (
-        args.answer_model
-        or os.getenv("ANSWER_MODEL")
-        or os.getenv("TEXT_MODEL")
-        or "groq/llama-3.3-70b-versatile"
-    )
+    settings = get_settings()
+    answer_model = args.answer_model or settings.llm.get_answer_model()
 
     logger.info("━━━  API SERVER  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     logger.info("Index dir   : %s", args.index_dir)
@@ -291,12 +298,13 @@ def _do_api(args: argparse.Namespace, output_dir: Path) -> None:
 
 def _do_serve(args: argparse.Namespace, output_dir: Path) -> None:
     """Instantiate the ChatUI and launch Gradio."""
-    import os
-    from manual_rag_api.config import RetrievalConfig
+    from manual_rag_api.config import RetrievalConfig, get_settings
     from manual_rag_api.infrastructure.db.searcher import Searcher
     from manual_rag_api.infrastructure.generation.answer_generator import AnswerGenerator
     from manual_rag_api.infrastructure.llm_providers.litellm_client import LitellmClient
     from manual_rag_api.infrastructure.ui import ChatUI
+
+    settings = get_settings()
 
     retrieval_cfg = RetrievalConfig(
         index_dir       = Path(args.index_dir),
@@ -304,12 +312,7 @@ def _do_serve(args: argparse.Namespace, output_dir: Path) -> None:
         top_k           = args.top_k,
     )
 
-    answer_model = (
-        args.answer_model
-        or os.getenv("ANSWER_MODEL")
-        or os.getenv("TEXT_MODEL")
-        or "groq/llama-3.3-70b-versatile"
-    )
+    answer_model = args.answer_model or settings.llm.get_answer_model()
 
     logger.info("━━━  SERVING  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     logger.info("Index dir   : %s", retrieval_cfg.index_dir)
@@ -329,6 +332,31 @@ def _do_serve(args: argparse.Namespace, output_dir: Path) -> None:
         server_port = args.port,
         share       = args.share,
     )
+
+
+def _do_eval(args: argparse.Namespace) -> None:
+    """Run the retrieval eval suite and print/save the report."""
+    from manual_rag_api.config import RetrievalConfig
+    from manual_rag_api.infrastructure.db.searcher import Searcher
+    from manual_rag_api.application.evaluation_service.service import Evaluator
+
+    retrieval_cfg = RetrievalConfig(
+        index_dir       = Path(args.index_dir),
+        embedding_model = args.embedding_model,
+        top_k           = args.top_k,
+    )
+
+    searcher = Searcher(retrieval_cfg)
+    searcher.warm_up()
+
+    evaluator = Evaluator(searcher)
+    report    = evaluator.run(Path(args.dataset), top_k=args.top_k)
+
+    print()
+    print(report.summary())
+
+    if args.report:
+        report.save(Path(args.report))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -364,6 +392,9 @@ def main() -> None:
     elif args.mode == "run":
         output_dir = _do_index(args)
         _do_serve(args, output_dir)
+
+    elif args.mode == "eval":
+        _do_eval(args)
 
     else:
         parser.print_help()

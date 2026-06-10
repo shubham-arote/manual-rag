@@ -1,0 +1,136 @@
+{
+  "dataset": "eval\\golden_jlg.json",
+  "timestamp": "2026-06-10T16:33:35+00:00",
+  "top_k": 5,
+  "n_scored": 35,
+  "n_adversarial": 2,
+  "hit_at_k": 0.8286,
+  "mrr": 0.5524,
+  "mean_latency_s": 0.1865,
+  "by_type": {
+    "comparison": {
+      "n": 1,
+      "hit_at_k": 0.0,
+      "mrr": 0.0
+    },
+    "general": {
+      "n": 3,
+      "hit_at_k": 1.0,
+      "mrr": 1.0
+    },
+    "lookup": {
+      "n": 27,
+      "hit_at_k": 0.8148148148148148,
+      "mrr": 0.4938271604938272
+    },
+    "procedure": {
+      "n": 4,
+      "hit_at_k": 1.0,
+      "mrr": 0.75
+    }
+  },
+  "misses": [
+    {
+      "id": "q006",
+      "question": "what engine oil viscosity should I use",
+      "expected_pages": [
+        23,
+        24
+      ],
+      "retrieved_pages": [
+        12,
+        28
+      ]
+    },
+    {
+      "id": "q008",
+      "question": "what brake fluid does this machine use",
+      "expected_pages": [
+        23,
+        24
+      ],
+      "retrieved_pages": [
+        11,
+        12,
+        28
+      ]
+    },
+    {
+      "id": "q009",
+      "question": "engine coolant mixture specification",
+      "expected_pages": [
+        23,
+        24
+      ],
+      "retrieved_pages": [
+        12,
+        28,
+        19
+      ]
+    },
+    {
+      "id": "q016",
+      "question": "what hydraulic fluid should I use",
+      "expected_pages": [
+        23,
+        24
+      ],
+      "retrieved_pages": [
+        12,
+        11
+      ]
+    },
+    {
+      "id": "q026",
+      "question": "difference in hydraulic capacity between 642 and 943",
+      "expected_pages": [
+        25,
+        26
+      ],
+      "retrieved_pages": [
+        1,
+        18,
+        20,
+        33,
+        21
+      ]
+    },
+    {
+      "id": "q032",
+      "question": "tire specifications",
+      "expected_pages": [
+        21,
+        22
+      ],
+      "retrieved_pages": [
+        12,
+        14,
+        15,
+        18,
+        28
+      ]
+    }
+  ],
+  "adversarial": [
+    {
+      "id": "q036",
+      "question": "how do I replace the alternator belt",
+      "retrieved_pages": [
+        10,
+        12,
+        15
+      ]
+    },
+    {
+      "id": "q037",
+      "question": "hydraulic capacity for model 9000",
+      "retrieved_pages": [
+        27,
+        26,
+        25,
+        17,
+        11
+      ]
+    }
+  ]
+}

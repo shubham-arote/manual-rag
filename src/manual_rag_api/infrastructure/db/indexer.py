@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from manual_rag_api.config import RetrievalConfig
+from manual_rag_api.infrastructure.db.embedder import Embedder
 from manual_rag_api.infrastructure.llm_providers.litellm_client import LitellmClient
 from manual_rag_api.infrastructure.extraction.algorithms.flatten_table import flatten_table
 from manual_rag_api.domain.schema import Chunk, ChunkType
@@ -100,16 +101,19 @@ def _parse_table_rows(html: str) -> str:
     """
     Parse an HTML table into a JSON-encoded list of row dicts.
 
-    Each row dict maps header names (from <th>) to cell values (from <td>).
-    Handles simple tables; skips malformed rows silently.
+    Three layouts are handled:
 
-    Returns a JSON string (empty array "[]" on failure) suitable for storage
-    in the `table_rows` LanceDB column.
+    1. Header tables (<th> present) — row dicts keyed by header text.
+    2. Headerless tables where the FIRST ROW looks like a header
+       (all cells short, non-numeric) — promoted to header row.
+    3. Key-value tables (2 columns, or wide label/value rows) — emitted as
+       {"Parameter": <label>, "Value": <value>} rows so the TableQuerier
+       can match them.  Spec/capacity tables in real manuals are mostly
+       this layout, and the old Col_0/Col_1 fallback made them unmatchable
+       (observed: 'hydraulic capacity 642' → table_hits=0 even though the
+       answer row existed).
 
-    Example:
-        "<table><tr><th>Model</th><th>Capacity</th></tr>
-                <tr><td>642</td><td>120L</td></tr></table>"
-        → '[{"Model": "642", "Capacity": "120L"}]'
+    Returns a JSON string (empty array "[]" on failure).
     """
     import json
     try:
@@ -119,33 +123,63 @@ def _parse_table_rows(html: str) -> str:
         if not table:
             return "[]"
 
-        # Extract headers from first <tr> containing <th> elements
-        headers: List[str] = []
+        # ── Collect raw cell grid ────────────────────────────────────────
+        grid: List[List[str]] = []
+        header_from_th: List[str] = []
         for tr in table.find_all("tr"):
             ths = tr.find_all("th")
-            if ths:
-                headers = [th.get_text(strip=True) for th in ths]
-                break
+            if ths and not header_from_th:
+                header_from_th = [th.get_text(strip=True) for th in ths]
+                continue
+            tds = tr.find_all("td")
+            if tds:
+                grid.append([td.get_text(strip=True) for td in tds])
 
-        if not headers:
-            # No <th> found — use positional column names (Col_0, Col_1, ...)
-            first_data = table.find("tr")
-            if first_data:
-                tds = first_data.find_all("td")
-                headers = [f"Col_{i}" for i in range(len(tds))]
+        if not grid:
+            return "[]"
+
+        _num_re = re.compile(r"\d[\d.,]{2,}")
+
+        def _looks_like_header(cells: List[str]) -> bool:
+            """Short, mostly alphabetic cells with no long numbers."""
+            if not cells or any(not c for c in cells):
+                return False
+            return all(
+                len(c) <= 40 and not _num_re.search(c)
+                for c in cells
+            )
+
+        headers: List[str] = header_from_th
+
+        # Promote first data row to header if it looks like one
+        if not headers and len(grid) >= 2 and _looks_like_header(grid[0]):
+            headers = grid[0]
+            grid    = grid[1:]
 
         rows: List[Dict[str, str]] = []
-        for tr in table.find_all("tr"):
-            tds = tr.find_all("td")
-            if not tds:
-                continue                          # header row — skip
-            values = [td.get_text(strip=True) for td in tds]
-            if len(values) == len(headers):
-                rows.append(dict(zip(headers, values)))
-            elif values:                          # column count mismatch — store raw
-                rows.append(dict(zip(
-                    headers[:len(values)], values
-                )))
+
+        if headers:
+            for values in grid:
+                if len(values) == len(headers):
+                    rows.append(dict(zip(headers, values)))
+                elif values:
+                    rows.append(dict(zip(headers[: len(values)], values)))
+        else:
+            # Key-value layout: pair label cells with the value that follows.
+            # Handles 2-col rows directly and wider rows pairwise.
+            for values in grid:
+                vals = [v for v in values if v]
+                if len(vals) == 2:
+                    rows.append({"Parameter": vals[0], "Value": vals[1]})
+                elif len(vals) > 2:
+                    # Pair off (label, value) left to right; odd leftover is
+                    # appended to the previous label as context.
+                    for i in range(0, len(vals) - 1, 2):
+                        rows.append({"Parameter": vals[i], "Value": vals[i + 1]})
+                elif len(vals) == 1 and rows:
+                    # Single-cell row — usually a sub-section label; record it
+                    # so following rows keep context.
+                    rows.append({"Parameter": vals[0], "Value": ""})
 
         return json.dumps(rows, ensure_ascii=False)
 
@@ -652,11 +686,9 @@ class Indexer:
         Sets chunk.vector, chunk.vector_dim, chunk.embedding_model on each.
         Validates dim consistency across the batch.
         """
-        encoder       = self._get_encoder()
+        embedder      = self._get_embedder()
         model_name    = self._cfg.embedding_model
-        # Truncate to 512 tokens worth of chars — the model's max context window.
-        # Very long texts (image descriptions, flattened tables) can cause native
-        # crashes in the tokenizer on Windows with certain torch builds.
+        # Truncate to ~512 tokens worth of chars — the model's max context window.
         texts         = [c.text[:2048] if c.text else " " for c in chunks]
         expected_dim: Optional[int] = None
 
@@ -667,12 +699,9 @@ class Indexer:
 
         vectors: List[List[float]] = []
         for start in range(0, len(texts), _EMBED_BATCH):
-            batch  = texts[start : start + _EMBED_BATCH]
-            embeds = encoder.encode(batch, show_progress_bar=False)
-            for vec in embeds:
-                v = vec.tolist()
+            batch = texts[start : start + _EMBED_BATCH]
+            for v in embedder.embed_documents(batch):
                 dim = len(v)
-
                 if expected_dim is None:
                     expected_dim = dim
                 elif dim != expected_dim:
@@ -714,7 +743,10 @@ class Indexer:
         if _TABLE in db.list_tables().tables:
             tbl = db.open_table(_TABLE)
             try:
-                tbl.delete(f'pdf_name = "{pdf_name}"')
+                # Single quotes — LanceDB SQL treats double quotes as
+                # identifiers, which made this delete silently match nothing.
+                safe_name = pdf_name.replace("'", "''")
+                tbl.delete(f"pdf_name = '{safe_name}'")
                 logger.debug("Deleted existing rows for '%s'.", pdf_name)
             except Exception as exc:
                 logger.warning("Could not delete existing rows: %s", exc)
@@ -737,11 +769,10 @@ class Indexer:
 
     # ── Lazy initialisers ────────────────────────────────────────────────
 
-    def _get_encoder(self):
+    def _get_embedder(self) -> Embedder:
         if self._encoder is None:
-            from sentence_transformers import SentenceTransformer
-            logger.info("Loading encoder '%s'…", self._cfg.embedding_model)
-            self._encoder = SentenceTransformer(self._cfg.embedding_model)
+            logger.info("Loading embedder '%s'…", self._cfg.embedding_model)
+            self._encoder = Embedder(self._cfg.embedding_model)
         return self._encoder
 
     def _get_db(self):

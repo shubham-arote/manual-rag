@@ -20,9 +20,12 @@ dependencies = [
     # UI
     "gradio>=4.0.0",
     # Utilities
+    "opik>=1.8.0",
+    "pydantic-settings>=2.10.0",
     "python-dotenv>=1.0.0",
     "tqdm>=4.0.0",
     "tenacity>=9.1.4",
+    "fastembed>=0.8.0",
 ]
 
 [project.scripts]

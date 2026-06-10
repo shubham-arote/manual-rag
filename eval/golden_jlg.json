@@ -1,0 +1,457 @@
+﻿[
+    {
+        "id":  "q001",
+        "question":  "hydraulic system capacity for model 642",
+        "expected_pages":  [
+                               25
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "40.2"
+                                     ],
+        "notes":  "capacity table, key-value layout, no outriggers 40.2 gal",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q002",
+        "question":  "hydraulic capacity 943",
+        "expected_pages":  [
+                               26
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "46.5"
+                                     ],
+        "notes":  "943 = 46.5 gallons / 177 L",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q003",
+        "question":  "hydraulic system capacity 1255",
+        "expected_pages":  [
+                               27
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "49.9"
+                                     ],
+        "notes":  "1255 = 49.9 gallons / 189 L",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q004",
+        "question":  "fuel tank capacity",
+        "expected_pages":  [
+                               25,
+                               26,
+                               27
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "38.3"
+                                     ],
+        "notes":  "same across models: 38.3 gal / 145 L",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q005",
+        "question":  "wheel lug nut torque",
+        "expected_pages":  [
+                               21
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "350"
+                                     ],
+        "notes":  "350-400 lb-ft (475-542 Nm)",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q006",
+        "question":  "what engine oil viscosity should I use",
+        "expected_pages":  [
+                               23,
+                               24
+                           ],
+        "query_type":  "lookup",
+        "notes":  "fluids tables, SAE grades by ambient temp",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q007",
+        "question":  "transmission capacity with filter change",
+        "expected_pages":  [
+                               25,
+                               26,
+                               27
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "14"
+                                     ],
+        "notes":  "14 quarts / 13.2 L",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q008",
+        "question":  "what brake fluid does this machine use",
+        "expected_pages":  [
+                               23,
+                               24
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "ATF"
+                                     ],
+        "notes":  "Mobil ATF-D/M",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q009",
+        "question":  "engine coolant mixture specification",
+        "expected_pages":  [
+                               23,
+                               24
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "50/50"
+                                     ],
+        "notes":  "ethylene glycol 50/50, cold weather 60/40",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q010",
+        "question":  "transfer case capacity 642",
+        "expected_pages":  [
+                               25
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "1.5"
+                                     ],
+        "notes":  "1.5 quarts / 1.4 L",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q011",
+        "question":  "DEF tank capacity",
+        "expected_pages":  [
+                               25,
+                               26,
+                               27
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "5.7"
+                                     ],
+        "notes":  "diesel exhaust fluid 5.7 gal / 21.5 L",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q012",
+        "question":  "front axle differential housing capacity for 943",
+        "expected_pages":  [
+                               26
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "13.2"
+                                     ],
+        "notes":  "943/1043 front = 13.2 quarts",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q013",
+        "question":  "air conditioning refrigerant type",
+        "expected_pages":  [
+                               23,
+                               24
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "134"
+                                     ],
+        "notes":  "R-134-a",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q014",
+        "question":  "cooling system capacity",
+        "expected_pages":  [
+                               25,
+                               26,
+                               27
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "5.2"
+                                     ],
+        "notes":  "5.2 gallons / 19.7 L all models",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q015",
+        "question":  "when should axle oil be changed for the first time",
+        "expected_pages":  [
+                               29,
+                               30
+                           ],
+        "query_type":  "procedure",
+        "notes":  "first 250 hours service schedule",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q016",
+        "question":  "what hydraulic fluid should I use",
+        "expected_pages":  [
+                               23,
+                               24
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "Mobilfluid"
+                                     ],
+        "notes":  "Mobilfluid 424 10W-30 or Exxon Univis HVI",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q017",
+        "question":  "what models does this manual cover",
+        "expected_pages":  [
+                               1
+                           ],
+        "query_type":  "general",
+        "expected_answer_contains":  [
+                                         "642"
+                                     ],
+        "notes":  "642, 742, 943, 1043, 1055, 1255",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q018",
+        "question":  "hydraulic cylinder drift specification",
+        "expected_pages":  [
+                               16,
+                               17
+                           ],
+        "query_type":  "lookup",
+        "notes":  "2.2.2 cylinder drift / 2.2.4 hydraulic cylinder performance",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q019",
+        "question":  "travel speed specification",
+        "expected_pages":  [
+                               16
+                           ],
+        "query_type":  "lookup",
+        "notes":  "2.2.1 travel speed",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q020",
+        "question":  "steering angle specification",
+        "expected_pages":  [
+                               16
+                           ],
+        "query_type":  "lookup",
+        "notes":  "2.2.3 steering angle",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q021",
+        "question":  "50 hour lubrication schedule",
+        "expected_pages":  [
+                               33,
+                               34
+                           ],
+        "query_type":  "procedure",
+        "notes":  "2.5.1 50 hour lube points",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q022",
+        "question":  "what maintenance is required every 1000 hours",
+        "expected_pages":  [
+                               31,
+                               37,
+                               38
+                           ],
+        "query_type":  "procedure",
+        "notes":  "2.4.9 every 1000 hours + 2.5.3 1000 hour lube",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q023",
+        "question":  "warranty information and replacement parts",
+        "expected_pages":  [
+                               15
+                           ],
+        "query_type":  "general",
+        "notes":  "2.1 replacement parts and warranty",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q024",
+        "question":  "engine performance specifications",
+        "expected_pages":  [
+                               19
+                           ],
+        "query_type":  "lookup",
+        "notes":  "2.2.6 engine performance",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q025",
+        "question":  "transmission performance specifications",
+        "expected_pages":  [
+                               20
+                           ],
+        "query_type":  "lookup",
+        "notes":  "2.2.7 transmission performance",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q026",
+        "question":  "difference in hydraulic capacity between 642 and 943",
+        "expected_pages":  [
+                               25,
+                               26
+                           ],
+        "query_type":  "comparison",
+        "notes":  "40.2 vs 46.5 gallons",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q027",
+        "question":  "boom chain lubricant type",
+        "expected_pages":  [
+                               23,
+                               24
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "80W-90"
+                                     ],
+        "notes":  "Gear Oil 80W-90",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q028",
+        "question":  "rear wheel end capacity 642",
+        "expected_pages":  [
+                               25
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "1.4"
+                                     ],
+        "notes":  "rear 1.4 quarts / 1.3 L",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q029",
+        "question":  "synthetic oil engine filter change interval",
+        "expected_pages":  [
+                               31
+                           ],
+        "query_type":  "procedure",
+        "notes":  "2.4.9 note on fully synthetic oil",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q030",
+        "question":  "what grease should be used on grease fittings",
+        "expected_pages":  [
+                               23,
+                               24
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "NLGI"
+                                     ],
+        "notes":  "extreme pressure grease NLGI Grade 2/3 EP with moly",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q031",
+        "question":  "engine stop before service safety rule",
+        "expected_pages":  [
+                               11,
+                               12
+                           ],
+        "query_type":  "general",
+        "notes":  "1.6.4 operational hazards",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q032",
+        "question":  "tire specifications",
+        "expected_pages":  [
+                               21,
+                               22
+                           ],
+        "query_type":  "lookup",
+        "notes":  "2.2.8 tires",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q033",
+        "question":  "electrical system specifications 642",
+        "expected_pages":  [
+                               18
+                           ],
+        "query_type":  "lookup",
+        "notes":  "2.2.5 electrical system a. 642, 742",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q034",
+        "question":  "friction modifier axle differential maximum amount",
+        "expected_pages":  [
+                               25,
+                               26,
+                               27
+                           ],
+        "query_type":  "lookup",
+        "expected_answer_contains":  [
+                                         "ounce"
+                                     ],
+        "notes":  "642/742: 12.2 oz; others 24 oz",
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q035",
+        "question":  "hydraulic connection assembly torque specification",
+        "expected_pages":  [
+                               14
+                           ],
+        "query_type":  "lookup",
+        "notes":  "2.8 listed in section contents p14 â€” actual content beyond p38 not indexed; tests graceful failure",
+        "adversarial":  true,
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q036",
+        "question":  "how do I replace the alternator belt",
+        "expected_pages":  [
+
+                           ],
+        "query_type":  "procedure",
+        "notes":  "NOT in indexed pages â€” system should not fabricate",
+        "adversarial":  true,
+        "pdf_name":  "short_complex_manual"
+    },
+    {
+        "id":  "q037",
+        "question":  "hydraulic capacity for model 9000",
+        "expected_pages":  [
+
+                           ],
+        "query_type":  "lookup",
+        "notes":  "nonexistent model â€” should not match a wrong model confidently",
+        "adversarial":  true,
+        "pdf_name":  "short_complex_manual"
+    }
+]

@@ -1,0 +1,101 @@
+{
+  "dataset": "eval\\golden_jlg.json",
+  "timestamp": "2026-06-16T09:44:14+00:00",
+  "top_k": 5,
+  "n_scored": 35,
+  "n_adversarial": 2,
+  "hit_at_k": 0.9143,
+  "mrr": 0.75,
+  "mean_latency_s": 7.098,
+  "by_type": {
+    "comparison": {
+      "n": 1,
+      "hit_at_k": 0.0,
+      "mrr": 0.0
+    },
+    "general": {
+      "n": 3,
+      "hit_at_k": 1.0,
+      "mrr": 1.0
+    },
+    "lookup": {
+      "n": 27,
+      "hit_at_k": 0.9259259259259259,
+      "mrr": 0.7314814814814815
+    },
+    "procedure": {
+      "n": 4,
+      "hit_at_k": 1.0,
+      "mrr": 0.875
+    }
+  },
+  "misses": [
+    {
+      "id": "q012",
+      "question": "front axle differential housing capacity for 943",
+      "expected_pages": [
+        26
+      ],
+      "retrieved_pages": [
+        27,
+        19,
+        33,
+        20,
+        37
+      ]
+    },
+    {
+      "id": "q026",
+      "question": "difference in hydraulic capacity between 642 and 943",
+      "expected_pages": [
+        25,
+        26
+      ],
+      "retrieved_pages": [
+        33,
+        20,
+        19,
+        17,
+        37
+      ]
+    },
+    {
+      "id": "q034",
+      "question": "friction modifier axle differential maximum amount",
+      "expected_pages": [
+        25,
+        26,
+        27
+      ],
+      "retrieved_pages": [
+        23,
+        24,
+        6,
+        7,
+        16
+      ]
+    }
+  ],
+  "adversarial": [
+    {
+      "id": "q036",
+      "question": "how do I replace the alternator belt",
+      "retrieved_pages": [
+        30,
+        15,
+        13,
+        12
+      ]
+    },
+    {
+      "id": "q037",
+      "question": "hydraulic capacity for model 9000",
+      "retrieved_pages": [
+        27,
+        26,
+        25,
+        19
+      ]
+    }
+  ]
+}

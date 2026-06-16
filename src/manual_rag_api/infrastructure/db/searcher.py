@@ -36,6 +36,7 @@ from manual_rag_api.domain.query.classifier import (
 from manual_rag_api.domain.query.filters import CellMatch, SearchFilter, SearchResult
 from manual_rag_api.domain.schema import Chunk, ChunkType
 from manual_rag_api.infrastructure.db.embedder import Embedder
+from manual_rag_api.infrastructure.db.reranker import Reranker
 from manual_rag_api.infrastructure.db.table_querier import TableQuerier
 
 logger = logging.getLogger(__name__)
@@ -78,7 +79,8 @@ class Searcher:
     ) -> None:
         self._cfg         = config
         self._domain_cfg  = domain_config or DomainConfig()
-        self._encoder     = None   # lazy SentenceTransformer
+        self._encoder     = None   # lazy Embedder (fastembed/ONNX)
+        self._reranker    = None   # lazy Reranker (cross-encoder)
         self._db          = None   # lazy LanceDB connection
         self._table       = None   # lazy LanceDB table handle
 
@@ -119,6 +121,13 @@ class Searcher:
             "BM25 corpus ready — %d docs  (%.1fs)",
             len(self._corpus_ids), time.perf_counter() - t1,
         )
+
+        # Pre-load the cross-encoder reranker when enabled.
+        if self._cfg.rerank_enabled:
+            t2 = time.perf_counter()
+            logger.info("Warming up reranker '%s'…", self._cfg.rerank_model)
+            self._get_reranker().warm_up()
+            logger.info("Reranker ready  (%.1fs)", time.perf_counter() - t2)
 
         # Auto-learn domain config from index content
         logger.info("Building domain config from index…")
@@ -261,10 +270,22 @@ class Searcher:
             base *= (1.0 + 0.12 * min(chunk.specificity_score, 5))
             return base
 
+        # First-stage ranking: fused score adjusted by specificity heuristics.
+        ranked_cids = sorted(chunk_map, key=_adjusted_score, reverse=True)
+
+        # Second-stage (optional): cross-encoder rerank over the top candidates.
+        # The cross-encoder reads each (query, passage) pair together and is a
+        # far stronger relevance signal than rank-fusion, so when enabled it
+        # owns the final ordering of the candidate window.
+        reranked = False
+        if self._cfg.rerank_enabled and len(ranked_cids) > 1:
+            new_order = self._rerank(query, ranked_cids, chunk_map)
+            if new_order is not None:
+                ranked_cids = new_order
+                reranked = True
+
         results: List[SearchResult] = []
-        for rank, cid in enumerate(
-            sorted(chunk_map, key=_adjusted_score, reverse=True)[:k]
-        ):
+        for rank, cid in enumerate(ranked_cids[:k]):
             results.append(SearchResult(
                 chunk          = chunk_map[cid],
                 score          = fused[cid],
@@ -318,14 +339,47 @@ class Searcher:
             results = self._follow_chains(results, filt)
 
         logger.info(
-            "search(%r) type=%s vec_w=%.1f bm25_w=%.1f "
+            "search(%r) type=%s vec_w=%.1f bm25_w=%.1f rerank=%s "
             "table_hits=%d xref_added=%d → %d results  "
             "[vec=%d bm25=%d fused=%d]",
-            query[:60], q_type, vec_w, bm25_w,
+            query[:60], q_type, vec_w, bm25_w, reranked,
             table_hit_count, xref_added,
             len(results), len(vec_ids), len(bm25_ids), len(fused),
         )
         return results
+
+    def _rerank(
+        self,
+        query:     str,
+        ranked_cids: List[str],
+        chunk_map: Dict[str, Chunk],
+    ) -> Optional[List[str]]:
+        """
+        Re-score the top ``rerank_candidates`` chunks with a cross-encoder and
+        return a new ordering.  Candidates beyond the rerank window keep their
+        first-stage order, appended after the reranked head.
+
+        Returns None if the reranker backend is unavailable (caller keeps the
+        first-stage order) — retrieval always degrades gracefully to
+        recall-only.
+        """
+        n_window = self._cfg.rerank_candidates
+        pool     = ranked_cids[:n_window]
+        # NB: passage truncation was measured and rejected — flattened-table
+        # chunks carry their spec values throughout, so truncating to lead text
+        # dropped answers (hit@5 0.971→0.914) without cutting latency (per-pair
+        # fixed cost dominates on CPU, not sequence length).  The latency lever
+        # is the candidate-window size, not passage length.
+        docs     = [chunk_map[cid].text or "" for cid in pool]
+
+        scores = self._get_reranker().rerank(query, docs)
+        if scores is None:
+            return None
+
+        order    = sorted(range(len(pool)), key=lambda i: scores[i], reverse=True)
+        reranked = [pool[i] for i in order]
+        reranked.extend(ranked_cids[n_window:])
+        return reranked
 
     def _expand_references(
         self,
@@ -750,6 +804,12 @@ class Searcher:
             logger.info("Loading embedder '%s'…", self._cfg.embedding_model)
             self._encoder = Embedder(self._cfg.embedding_model)
         return self._encoder
+
+    def _get_reranker(self) -> Reranker:
+        if self._reranker is None:
+            logger.info("Loading reranker '%s'…", self._cfg.rerank_model)
+            self._reranker = Reranker(self._cfg.rerank_model)
+        return self._reranker
 
     def _get_table(self):
         if self._table is None:

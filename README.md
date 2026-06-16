@@ -9,11 +9,18 @@ A production-grade Retrieval-Augmented Generation system for technical service m
 
 ---
 
+## System Architecture
+
+![Architecture diagram showing the full pipeline from PDF ingestion through OCR, metadata extraction, indexing, hybrid retrieval, generation, and UI/API interfaces](assets/architecture.png)
+
+---
+
 ## Features
 
 - **Multimodal ingestion** — extracts text, tables, and images from PDFs via Docling + EasyOCR
 - **5-step metadata pipeline** — context extraction, table correction, table metadata, image metadata, and enhancement enrich every chunk before indexing
 - **Hybrid retrieval** — BM25 + vector search fused via Reciprocal Rank Fusion (RRF)
+- **Cross-encoder reranking** — optional second stage that re-scores the candidate pool with a cross-encoder; measured to lift hit@5 from 0.83 → 0.97 and MRR from 0.59 → 0.89 on the table-heavy benchmark
 - **Query-type routing** — auto-classifies queries as `lookup`, `procedure`, `diagnostic`, `comparison`, or `general` and applies the best retrieval weights for each
 - **Deterministic table lookup** — exact cell-value matching for spec queries (torque, capacity, pressure) that bypasses fuzzy search entirely
 - **Domain-agnostic** — `DomainConfig` auto-learns model numbers and component types from whatever is indexed; no hardcoded assumptions about the manual's domain
@@ -26,65 +33,7 @@ A production-grade Retrieval-Augmented Generation system for technical service m
 
 ## Architecture
 
-```
-PDF
- │
- ▼
-┌─────────────────────────────────────────────────────────┐
-│  Ingestion Pipeline  (infrastructure/pipeline)          │
-│                                                         │
-│  Step 1 — OCR (Docling + EasyOCR)                       │
-│    └─ page_N/ocr_output_page_N.json                     │
-│  Step 2 — Improve Table Structure  (LLM vision)         │
-│    └─ page_N/improved_table_page_N.json                 │
-│  Step 3 — Context Metadata  (LLM vision, 3-page window) │
-│    └─ page_N/context_metadata_page_N.json               │
-│       model_applicability, section_path, component_type │
-│  Step 4 — Table Metadata  (LLM vision)                  │
-│    └─ page_N/table_metadata_page_N.json                 │
-│  Step 5 — Image Metadata  (LLM vision)                  │
-│    └─ page_N/image_metadata_page_N.json                 │
-└─────────────────────────────────────────────────────────┘
- │
- ▼
-┌─────────────────────────────────────────────────────────┐
-│  Indexer  (infrastructure/db/indexer.py)                │
-│                                                         │
-│  Chunk types: text | table | image                      │
-│  Embeddings:  BAAI/bge-small-en-v1.5                    │
-│  Store:       LanceDB  (embedded, no server required)   │
-│  Metadata:    section_path, model_applicability,        │
-│               component_type, specificity_score, …      │
-└─────────────────────────────────────────────────────────┘
- │
- ▼
-┌─────────────────────────────────────────────────────────┐
-│  Retrieval  (infrastructure/db/searcher.py)             │
-│                                                         │
-│  1. Classify query  → lookup / procedure / diagnostic … │
-│  2. Auto-detect model numbers  → soft pre-filter        │
-│  3. Vector search  (LanceDB ANN)                        │
-│  4. BM25 search    (rank-bm25, in-memory)               │
-│  5. RRF fusion with query-type weights                  │
-│  6. Specificity-score re-ranking                        │
-│  7. Deterministic table lookup  (TableQuerier)          │
-│  8. Cross-reference expansion  (procedure/diagnostic)   │
-│  9. Chain-following  (multi-page continuations)         │
-└─────────────────────────────────────────────────────────┘
- │
- ▼
-┌─────────────────────────────────────────────────────────┐
-│  Generation  (infrastructure/generation)                │
-│                                                         │
-│  Prompt template selected by query type                 │
-│  Context budget: 18 000 chars  (3 000 per chunk max)    │
-│  Output: JSON  { answer, citations[], missing_info }    │
-│  Confidence: heuristic from retrieval quality signals   │
-└─────────────────────────────────────────────────────────┘
- │
- ▼
-Gradio UI  /  FastAPI REST
-```
+> See the [System Architecture](#system-architecture) diagram at the top for a full visual overview. The sections below describe each layer in detail.
 
 ### Domain layer (pure Python — no I/O, no infrastructure imports)
 
@@ -275,6 +224,52 @@ final_score = rrf_score × (1 + 0.12 × min(specificity_score, 5))
 ```
 
 `specificity_score` is set at index time: +1 per tagged model, +1 for a known component type, +1 for a resolved section path. Chunks tagged with specific models and sections rank above generic front-matter with similar text similarity.
+
+### Cross-encoder reranking (optional second stage)
+
+Hybrid fusion is a *recall* engine — it casts a wide net and fuses two weak rankers by rank position, not content. When `--rerank` is enabled, the top ~30 fused candidates are re-scored by a cross-encoder (`Xenova/ms-marco-MiniLM-L-6-v2`, ONNX via fastembed) that reads each *(query, passage)* pair together and produces a true relevance score. This owns the final ordering of the candidate window.
+
+**Measured impact** (golden-dataset eval, `manual-rag eval`):
+
+| Corpus | Config | hit@5 | MRR |
+|--------|--------|-------|-----|
+| Telehandler (table-heavy specs) | hybrid only | 0.829 | 0.594 |
+| Telehandler | **+ reranker** | **0.971** | **0.890** |
+| FAA aircraft hydraulics (prose) | hybrid only | 0.967 | 0.750 |
+| FAA aircraft hydraulics | **+ reranker** | 0.967 | **0.925** |
+
+On the hard table corpus, lookup hit@5 went 0.815 → 1.000: spec questions that lost to prose chunks under rank-fusion are correctly surfaced once a cross-encoder reads query and passage together.
+
+**The trade-off is latency.** Cross-encoders run a fresh forward pass per pair (no caching), so the stage runs only on a small candidate pool and is **off by default**. Enable it where correctness outweighs latency:
+
+```bash
+manual-rag serve --rerank          # demo UI with reranking on
+manual-rag eval --dataset eval/golden_faa.json --rerank
+# or: RETRIEVAL__RERANK_ENABLED=true
+```
+
+See [eval/reports/RERANKER_COMPARISON.md](eval/reports/RERANKER_COMPARISON.md) for the full analysis, including why passage truncation was measured and rejected.
+
+---
+
+## Evaluation
+
+Retrieval quality is measured, not eyeballed. The eval harness runs a golden dataset of *(question, expected_pages, query_type)* triples against the live searcher and reports deterministic metrics — no LLM judge required for retrieval.
+
+```bash
+manual-rag eval --dataset eval/golden_faa.json --top-k 5 \
+                --report eval/reports/run.json
+```
+
+Metrics:
+- **hit@k** — fraction of questions where an expected page appears in the top-k
+- **MRR** — mean reciprocal rank of the first expected page
+- **per-query-type breakdown** — aggregate numbers hide regressions (a change that helps procedures can hurt lookups)
+- **adversarial questions** — unanswerable / wrong-model probes scored separately; retrieval is expected to surface *something*, but generation must decline
+
+Golden datasets live in `eval/`; reports in `eval/reports/`. Two corpora are included: a table-heavy telehandler manual (the hard benchmark) and Chapter 12 of the public-domain FAA Aviation Maintenance Technician Handbook (aircraft hydraulics).
+
+> Project discipline: **no retrieval change merges without an eval delta in the PR description.** This harness has already caught a wrong-document index, a silently-failing LanceDB delete, a broken metadata pipeline, and a JSON-key mismatch that was dropping every chunk's section path.
 
 ---
 

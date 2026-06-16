@@ -1,0 +1,71 @@
+{
+  "dataset": "eval\\golden_jlg.json",
+  "timestamp": "2026-06-16T06:22:30+00:00",
+  "top_k": 5,
+  "n_scored": 35,
+  "n_adversarial": 2,
+  "hit_at_k": 0.9714,
+  "mrr": 0.8905,
+  "mean_latency_s": 6.4601,
+  "by_type": {
+    "comparison": {
+      "n": 1,
+      "hit_at_k": 0.0,
+      "mrr": 0.0
+    },
+    "general": {
+      "n": 3,
+      "hit_at_k": 1.0,
+      "mrr": 1.0
+    },
+    "lookup": {
+      "n": 27,
+      "hit_at_k": 1.0,
+      "mrr": 0.9197530864197531
+    },
+    "procedure": {
+      "n": 4,
+      "hit_at_k": 1.0,
+      "mrr": 0.8333333333333334
+    }
+  },
+  "misses": [
+    {
+      "id": "q026",
+      "question": "difference in hydraulic capacity between 642 and 943",
+      "expected_pages": [
+        25,
+        26
+      ],
+      "retrieved_pages": [
+        33,
+        20,
+        19,
+        17,
+        37
+      ]
+    }
+  ],
+  "adversarial": [
+    {
+      "id": "q036",
+      "question": "how do I replace the alternator belt",
+      "retrieved_pages": [
+        30,
+        13,
+        15,
+        12
+      ]
+    },
+    {
+      "id": "q037",
+      "question": "hydraulic capacity for model 9000",
+      "retrieved_pages": [
+        27,
+        26,
+        25,
+        19
+      ]
+    }
+  ]
+}

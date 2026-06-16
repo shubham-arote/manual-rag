@@ -112,6 +112,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "--top-k", type=int, default=5,
         help="Default number of retrieval results  [default: 5]",
     )
+    parent.add_argument(
+        "--rerank", action="store_true",
+        help="Enable the cross-encoder reranker (higher precision, slower).",
+    )
+    parent.add_argument(
+        "--rerank-model", default=None, metavar="MODEL",
+        help="Cross-encoder model to use when --rerank is set.",
+    )
 
     # ── Root parser ───────────────────────────────────────────────────────────
     root = argparse.ArgumentParser(
@@ -310,6 +318,8 @@ def _do_serve(args: argparse.Namespace, output_dir: Path) -> None:
         index_dir       = Path(args.index_dir),
         embedding_model = args.embedding_model,
         top_k           = args.top_k,
+        rerank_enabled  = bool(getattr(args, "rerank", False)),
+        rerank_model    = getattr(args, "rerank_model", None) or "",
     )
 
     answer_model = args.answer_model or settings.llm.get_answer_model()
@@ -344,6 +354,8 @@ def _do_eval(args: argparse.Namespace) -> None:
         index_dir       = Path(args.index_dir),
         embedding_model = args.embedding_model,
         top_k           = args.top_k,
+        rerank_enabled  = bool(getattr(args, "rerank", False)),
+        rerank_model    = getattr(args, "rerank_model", None) or "",
     )
 
     searcher = Searcher(retrieval_cfg)

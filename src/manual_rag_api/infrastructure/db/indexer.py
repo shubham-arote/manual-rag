@@ -521,10 +521,25 @@ class Indexer:
             key=lambda d: int(d.name.split("_")[1]),
         )
 
+        # Deterministic section hierarchy from the document structure tree.
+        # When present, this overrides the noisy per-page LLM section guess.
+        from manual_rag_api.infrastructure.extraction.structure_extractor import (
+            load_page_paths,
+        )
+        page_paths = load_page_paths(base.parent, pdf_name)
+        if page_paths:
+            logger.info(
+                "Structure tree: %d/%d pages have a deterministic section_path.",
+                len(page_paths), len(page_dirs),
+            )
+
         chunks: List[Chunk] = []
         for page_dir in page_dirs:
             page_num = int(page_dir.name.split("_")[1])
-            new = self._page_chunks(page_dir, pdf_name, page_num, len(chunks))
+            new = self._page_chunks(
+                page_dir, pdf_name, page_num, len(chunks),
+                page_paths.get(page_num),
+            )
             chunks.extend(new)
 
         return chunks
@@ -535,12 +550,15 @@ class Indexer:
         pdf_name: str,
         page_num: int,
         global_offset: int,
+        structural_path: Optional[List[str]] = None,
     ) -> List[Chunk]:
         """Produce all chunks (text, table, image) for one page."""
         basic = _load_json(page_dir / f"metadata_page_{page_num}.json")
         ctx   = _load_json(page_dir / f"context_metadata_page_{page_num}.json")
 
-        section_path = _extract_section_path(ctx.get("section", {}))
+        # Prefer the deterministic structure-tree path; fall back to the LLM
+        # guess only when the structure tree has nothing for this page.
+        section_path = structural_path or _extract_section_path(ctx.get("section", {}))
         page_img     = _page_image_rel(page_num)
 
         # Cross-page continuity flags from context metadata.

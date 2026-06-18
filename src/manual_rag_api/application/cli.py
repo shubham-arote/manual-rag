@@ -241,6 +241,13 @@ def _do_index(args: argparse.Namespace) -> Path:
     processor = PDFProcessor(pipeline_cfg)
     processor.run()
 
+    # ── Document structure (deterministic section hierarchy) ──────────────────
+    from manual_rag_api.infrastructure.extraction.structure_extractor import (
+        StructureExtractor,
+    )
+    logger.info("━━━  STRUCTURE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    StructureExtractor(pdf_path, output_dir).run()
+
     # ── Retrieval config ──────────────────────────────────────────────────────
     retrieval_cfg = RetrievalConfig(
         index_dir       = Path(args.index_dir),
